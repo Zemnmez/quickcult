@@ -1,5 +1,6 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_project")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+
 package(default_visibility = [":__subpackages__", "//solve:__subpackages__"]) 
 
 ts_project(
