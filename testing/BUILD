@@ -14,7 +14,7 @@ py_test(
 )
 
 ts_project(
-    name = "typescript_basic_test.js",
+    name = "typescript_basic_test_js",
     srcs = [ "typescript_basic_test.ts" ],
     tsconfig="//:tsconfig",
     deps=[
@@ -26,5 +26,5 @@ ts_project(
 
 jest_test(
     name="typescript_basic_test",
-    srcs=["typescript_basic_test.js"],
+    srcs=["typescript_basic_test_js"],
 )
