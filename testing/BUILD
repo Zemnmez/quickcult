@@ -1,7 +1,7 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@rules_python//python:defs.bzl", "py_test")
-
-    
+load("//tools/jest:jest.bzl", "jest_test")
+load("@npm//@bazel/typescript:index.bzl", "ts_project")
 
 go_test(
     name = "go_basic_test",
@@ -11,4 +11,20 @@ go_test(
 py_test(
     name="python_basic_test",
     srcs = ["python_basic_test.py"]
+)
+
+ts_project(
+    name = "typescript_basic_test.js",
+    srcs = [ "typescript_basic_test.ts" ],
+    tsconfig="//:tsconfig",
+    deps=[
+        "@npm//@types/node",
+        "@npm//@types/jest"
+    ],
+)
+
+
+jest_test(
+    name="typescript_basic_test",
+    srcs=["typescript_basic_test.js"],
 )

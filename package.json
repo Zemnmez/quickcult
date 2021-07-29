@@ -8,7 +8,9 @@
         "@bazel/ibazel": "latest",
         "@bazel/typescript": "latest",
         "@tsconfig/node14": "^1.0.1",
+        "@types/jest": "^26.0.24",
         "@types/node": "^16.4.2",
+        "jest-cli": "^27.0.6",
         "typescript": "latest"
     },
     "scripts": {
