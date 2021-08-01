@@ -27,7 +27,7 @@ func (f *FileFlagWC) Set(s string) (err error) {
 		return
 	}
 
-	f.WriteCloser, err = os.Open(s)
+	f.WriteCloser, err = os.OpenFile(s, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0777)
 	return
 }
 

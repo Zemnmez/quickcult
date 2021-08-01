@@ -29,6 +29,7 @@ def fetch_dependencies():
         sha256 = "934c9ceb552e84577b0faf1e5a2f0450314985b4d8712b2b70717dc679fdc01b",
     )
 
+
     http_archive(
         name = "io_bazel_rules_go",
         sha256 = "8e968b5fcea1d2d64071872b12737bbb5514524ee5f0a4f54f5920266c261acb",

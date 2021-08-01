@@ -6,13 +6,13 @@ import (
 	"io/fs"
 )
 
-func ZipFs(w io.Writer, fs fs.FS) (err error) {
+func ZipFs(w io.Writer, f fs.FS) (err error) {
 	z := zip.NewWriter(w)
 
 	defer z.Close()
 
-	return fs.WalkDir(fs, ".", func(path string, d fs.DirEntry, err error) error {
-		if fs.IsDir() {
+	return fs.WalkDir(f, ".", func(path string, d fs.DirEntry, err error) error {
+		if d.IsDir() {
 			return nil
 		}
 		dst, err := z.Create(path)
@@ -20,7 +20,7 @@ func ZipFs(w io.Writer, fs fs.FS) (err error) {
 			return err
 		}
 
-		src, err := fs.Open(path)
+		src, err := f.Open(path)
 		if err != nil {
 			return err
 		}
@@ -31,5 +31,9 @@ func ZipFs(w io.Writer, fs fs.FS) (err error) {
 			return nil
 		}
 
+		return nil
+
 	})
+
+	return
 }
