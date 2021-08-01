@@ -47,12 +47,14 @@ async function Main(files = process.argv.slice(2)) {
 
     const output: Object = {}
     for (const file of files) {
+        const content = (await fs.promises.readFile(file)).toString();
+        if (content.trim() === "") continue;
+        const code = `(${content.replace(/\n/gm, "")})`;
         try {
-            const content = (await fs.promises.readFile(file)).toString();
-            if (content.trim() === "") continue;
-            mergeShallow(output, eval(`(${content})`));
+            mergeShallow(output, eval(code));
 
         } catch (e) {
+            console.error("Error occurred in:", code);
             throw new ParsingFileError(e, file);
         }
     }
@@ -60,6 +62,11 @@ async function Main(files = process.argv.slice(2)) {
     console.log(JSON.stringify(output));
 }
 
+
 if (require.main === module) {
-    Main().catch(e => console.error(e));
+    Main().catch(e => {
+        console.error(e);
+    
+        process.exitCode = process.exitCode || 1
+    });
 }

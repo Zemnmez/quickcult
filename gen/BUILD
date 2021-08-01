@@ -24,8 +24,8 @@ genrule(
     tools = [ "@bazel_tools//tools/zip:zipper" ],
     exec_tools = [ ":collate_game_core" ],
     outs = [ "core_en.json" ],
-    cmd = "$(execpath @bazel_tools//tools/zip:zipper) x $(location //gen/cultist_data:steam_gen_cultist_out_zip) $@_gamedir_tmp" +
-        "./$(execpath //gen:collate_game_core) $$(find gamedir_tmp/cultistsimulator_Data/StreamingAssets/content/core -name '*.json') > $@",
+    cmd = "$(execpath @bazel_tools//tools/zip:zipper) x $(location //gen/cultist_data:steam_gen_cultist_out_zip) -d $@_gamedir_tmp &&" +
+        "find $@_gamedir_tmp/CS_Data/StreamingAssets/content/core -name '*.json' | xargs ./$(execpath //gen:collate_game_core) > $@",
     message = "generating collated game data"
 )
 
