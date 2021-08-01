@@ -15,9 +15,9 @@ container_image(
 genrule(
     name = "steam_gen_cultist",
     exec_tools = [  ":steam_container"],
-    tools = [ "@bazel_tools//tools/zip:zipper" ],
+    tools = [ "//go/cmd/zipdir:zipdir" ],
     outs = [ "steam_gen_cultist_out" ],
     cmd = "$(location :steam_container) && docker run -v $$(realpath $@)_tmp:/steam_gen_cultist_gen_data bazel/gen/cultist_data:steam_container +login anonymous +force_install_dir /steam_gen_cultist_gen_data +app_update 718670 +quit"
-        +  "&& $(location @bazel_tools//tools/zip:zipper) c $@ $@_tmp",
+        +  "&& $(location //go/cmd/zipdir:zipdir) -input $@_tmp -output $@",
     message = "downloading cultist simulator..."
 )
