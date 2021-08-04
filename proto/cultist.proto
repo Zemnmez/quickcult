@@ -96,3 +96,19 @@ message Verb {
     string description = 2;
     repeated Slot slots = 3;
 }
+
+message Legacy {
+    string id = 1;
+    string label = 2;
+    string fromending = 3;
+    string description = 4;
+    string startdescription = 5;
+    map<string, uint32> effects = 6;
+    string image = 7;
+    string startingverbid = 8;
+    bool newstart = 9;
+    bool availableWithoutEndingMatch = 10;
+    repeated string statusbarelements = 11;
+    string tablecoverimage = 12;
+    repeated string excludesonending = 13;
+}
