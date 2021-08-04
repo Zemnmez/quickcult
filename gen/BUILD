@@ -34,14 +34,14 @@ genrule(
 proto_library (
     name = "core_proto",
     srcs = [ "core.proto" ],
-    deps = [ "//proto:cultist_proto" ]
+    deps = [ "//proto:cultist_proto", "@com_google_protobuf//:struct_proto" ],
 )
 
 
 py_proto_library (
     name = "core_py_proto",
     srcs = [ "core.proto" ],
-    deps = [ "//proto:cultist_py_proto" ]
+    deps = [ "//proto:cultist_py_proto", "@com_google_protobuf//:protobuf_python" ]
 )
 
 
