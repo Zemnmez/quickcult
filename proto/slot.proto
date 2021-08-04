@@ -1,0 +1,10 @@
+package Slot;
+
+message Slot {
+    string id = 1;
+    string label = 2;
+    string description = 3;
+    map<string, uint64> required = 4;
+    map<string, uint64> forbidden = 4;
+    bool greedy = 5;
+}

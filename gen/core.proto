@@ -1,0 +1,16 @@
+package gen;
+
+import "proto/culture";
+import "proto/deck";
+import "proto/element";
+import "proto/recipe";
+import "proto/slot";
+import "proto/verb";
+
+message Core {
+    repeated culture.Culture cultures = 1;
+    repeated deck.Deck decks = 2;
+    repeated element.Element elements = 3;
+    repeated slot.Slot slots = 4;
+    repeated verb.Verb verbs = 5;
+}
