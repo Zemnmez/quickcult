@@ -47,14 +47,15 @@ async function Main(files = process.argv.slice(2)) {
 
     const output: Object = {}
     for (const file of files) {
-        const content = (await fs.promises.readFile(file)).toString();
+        const content = (await fs.promises.readFile(file, {encoding: 'utf-8'}))
+            .replace(/\r?\n/gm, "");
+
         if (content.trim() === "") continue;
-        const code = `(${content.replace(/\n/gm, "")})`;
+        const code = `(${content})`;
         try {
             mergeShallow(output, eval(code));
 
         } catch (e) {
-            console.error("Error occurred in:", code);
             throw new ParsingFileError(e, file);
         }
     }
