@@ -1,9 +1,0 @@
-package verb;
-
-import "proto/slot";
-
-message Verb {
-    string id = 1;
-    string description = 2;
-    repeated slot.Slot slots = 3;
-}

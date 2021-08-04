@@ -1,4 +1,5 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_project")
+load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 load("@rules_pkg//:pkg.bzl", "pkg_zip")
 
@@ -28,5 +29,13 @@ genrule(
         "find $@_gamedir_tmp/CS_Data/StreamingAssets/content/core -name '*.json' | xargs ./$(execpath //gen:collate_game_core) > $@",
     message = "generating collated game data"
 )
+
+proto_library (
+    name = "core_proto",
+    srcs = [ "core.proto" ],
+    deps = [ "//proto:cultist_proto" ]
+)
+
+
 
 

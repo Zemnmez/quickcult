@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package cultist;
+
+message Culture {
+    // unique id for this culture
+    // @example "german"
+    string id = 1;
+    string fontscript = 2;
+    bool released = 3;
+    string endonym = 4;
+    string exonym = 5;
+    UILabels uilabels = 6;
+}
+
+message UILabels {
+    // TBD
+}
+
+message Deck {
+    string id = 1;
+    string description = 2;
+    string label = 3;
+    bool resetonexhaustion = 4;
+    // cards in this deck
+    repeated string spec = 5;
+}
+
+message Element {
+    string id = 1;
+    bool isAspect = 2;
+    bool isHidden = 3;
+    string label = 4;
+    string icon = 5;
+    bool unique = 6;
+    map<string, uint64> xtriggers = 7;
+    string description = 8;
+    map<string, uint64> aspects = 9;
+    uint64 lifetime = 10;
+    string uniquenessgroup = 11;
+    repeated Slot slots = 12;
+}
+
+message Recipe {
+    string id = 1;
+    string actionid = 2;
+    map<string, int64> aspects = 3;
+    map<string, int64> requirements = 8;
+    string description = 4;
+    string label = 5;
+    uint64 warmup = 6;
+    string craftable = 7;
+    repeated Effect alt = 9;
+    repeated Slot slots = 10;
+    string startdescription = 11;
+    string comments = 12;
+    repeated Mutation mutations = 13;
+    int64 maxexecutions = 14;
+    repeated LinkedEffect linked = 15;
+    map<string, int64> tablereqs = 16;
+    map<string, int64> effects = 17;
+}
+
+message LinkedEffect {
+    string id = 1;
+    // chance out of 100
+    int64 chance = 2;
+}
+
+message Effect {
+    // the recipe to be triggered
+    string id = 1;
+    // chance out of 100
+    int32 chance = 2;
+
+    bool additional = 3;
+}
+
+message Mutation {
+    string filter = 1;
+    int64 level = 2;
+    string mutate = 3;
+}
+
+message Slot {
+    string id = 1;
+    string label = 2;
+    string description = 3;
+    map<string, uint64> required = 4;
+    map<string, uint64> forbidden = 5;
+    bool greedy = 6;
+}
+
+message Verb {
+    string id = 1;
+    string description = 2;
+    repeated Slot slots = 3;
+}

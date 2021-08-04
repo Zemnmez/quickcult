@@ -1,16 +1,13 @@
+syntax = "proto3";
+
 package gen;
 
-import "proto/culture";
-import "proto/deck";
-import "proto/element";
-import "proto/recipe";
-import "proto/slot";
-import "proto/verb";
+import "proto/cultist.proto";
 
 message Core {
-    repeated culture.Culture cultures = 1;
-    repeated deck.Deck decks = 2;
-    repeated element.Element elements = 3;
-    repeated slot.Slot slots = 4;
-    repeated verb.Verb verbs = 5;
+    repeated cultist.Culture cultures = 1;
+    repeated cultist.Deck decks = 2;
+    repeated cultist.Element elements = 3;
+    repeated cultist.Slot slots = 4;
+    repeated cultist.Verb verbs = 5;
 }
