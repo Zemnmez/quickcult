@@ -4,6 +4,6 @@ load("@pip//:requirements.bzl", "requirement")
 py_binary(
   name = "main",
   srcs = ["main.py"],
-  deps = [ requirement("z3-solver") ],
+  deps = [ requirement("z3-solver"), "//gen:core_py" ],
   data = [ "//gen:core_en.json" ]
 )

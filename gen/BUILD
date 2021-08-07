@@ -44,6 +44,13 @@ py_proto_library (
     deps = [ "//proto:cultist_py_proto", "@com_google_protobuf//:protobuf_python" ]
 )
 
+py_library (
+    name = "core_py",
+    srcs = [ "core.py" ],
+    deps = ["//gen:core_py_proto"],
+    data = [ "//gen:core_en.json" ]
+)
+
 
 
 
