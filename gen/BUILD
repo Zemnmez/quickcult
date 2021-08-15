@@ -49,3 +49,14 @@ typescript_proto_library(
   name = "core_ts_proto",
   proto = ":core_proto",
 )
+
+py_library (
+    name = "core_py",
+    srcs = [ "core.py" ],
+    deps = ["//gen:core_py_proto"],
+    data = [ "//gen:core_en.json" ]
+)
+
+
+
+
