@@ -65,10 +65,10 @@ def fetch_dependencies():
     )
 
     http_archive(
-	name = "rules_typescript_proto",
-	sha256 = "aac6dec2c8d55da2b2c2689b7a2afe44b691555cab32e2eaa2bdd29627d950e9",
-	strip_prefix = "rules_typescript_proto-1.0.1",
-	urls = [
-		"https://github.com/Dig-Doug/rules_typescript_proto/archive/1.0.1.tar.gz",
-	],
-	)
+        name = "rules_typescript_proto",
+        sha256 = "aac6dec2c8d55da2b2c2689b7a2afe44b691555cab32e2eaa2bdd29627d950e9",
+        strip_prefix = "rules_typescript_proto-1.0.1",
+        urls = [
+            "https://github.com/Dig-Doug/rules_typescript_proto/archive/1.0.1.tar.gz",
+        ],
+    )

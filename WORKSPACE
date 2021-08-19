@@ -100,3 +100,6 @@ load("@rules_typescript_proto//:index.bzl", "rules_typescript_proto_dependencies
 
 rules_typescript_proto_dependencies()
 
+load("@npm//@bazel/labs:package.bzl", "npm_bazel_labs_dependencies")
+
+npm_bazel_labs_dependencies()

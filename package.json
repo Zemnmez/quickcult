@@ -11,10 +11,15 @@
         "@types/jest": "^26.0.24",
         "@types/node": "^16.4.2",
         "jest-cli": "^27.0.6",
-        "typescript": "latest"
+        "typescript": "^4.3.5"
     },
     "scripts": {
         "build": "yarn bazel build //... --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures",
-        "test": "yarn bazel test //...  --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures"
+        "test": "yarn bazel test //...  --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures",
+        "bazel_build": "yarn bazel build  --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures",
+        "bazel_run": "yarn bazel run  --action_env=STEAM_USERNAME --action_env=STEAM_PASSWORD --verbose_failures"
+    },
+    "dependencies": {
+        "@bazel/labs": "^3.8.0"
     }
 }
