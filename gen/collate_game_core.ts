@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 export class ParsingFileError extends Error {
-    name = "ParsingFileError"
+    override name = "ParsingFileError"
     constructor(public parent: Error, public file: string) {
         super(`parsing file: ${file}: ${parent}`);
     }

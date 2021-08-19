@@ -68,11 +68,15 @@ export interface Induction {
 	chance: number
 }
 
+export interface Effect {
+	[value: string]: number |  string
+}
+
 export interface Recipe {
 	id: string,
 	actionid?: string,
 	aspects?: { [elementid: string]: number },
-	requirements?: unknown,
+	requirements?: { [aspectid: string]: number },
 	description?: string,
 	label?: string,
 	warmup?: number,
@@ -85,7 +89,7 @@ export interface Recipe {
 	maxexecutions?: number,
 	linked?: Recipe[],
 	tablereqs?: { [aspect: string]: number},
-	effects?: { [aspect: string]: number | string},
+	effects?: Effect,
 	deckeffects?: { [aspect: string]: number | string},
 	burnimage?: string,
 	extantreqs?: { [aspect: string]: number | string},
@@ -120,6 +124,7 @@ export interface Slot {
 	description?: string,
 	required?: {[kind:string]: number},
 	forbidden?: {[kind:string]: number},
+	requirements?: {[kind:string]: number},
 	greedy?: boolean,
 	actionid?: string,
 	consumes?: boolean,
@@ -140,7 +145,7 @@ export interface Legacy {
 	fromending?: string,
 	description?: string,
 	startdescription?: string,
-	effects?: { [key: string]: number},
+	effects?: Effect,
 	image?: string,
 	startingverbid?: string,
 	newstart?: boolean,

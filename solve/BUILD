@@ -8,6 +8,7 @@ ts_project(
     tsconfig = "//:tsconfig",
     deps = [
         "@npm//@types/node",
+        "@npm//immutable"
     ],
 )
 
