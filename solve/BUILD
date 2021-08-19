@@ -8,11 +8,11 @@ ts_project(
     tsconfig = "//:tsconfig",
     deps = [
         "@npm//@types/node",
-        "//gen:core_en_ts_js"
     ],
 )
 
 nodejs_binary(
     name = "main",
     entry_point = "main.js",
+    data = [ "//gen:core_en.json" ],
 )

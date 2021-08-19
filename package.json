@@ -7,6 +7,7 @@
         "@bazel/buildifier": "latest",
         "@bazel/ibazel": "latest",
         "@bazel/typescript": "latest",
+        "@tsconfig/node12": "^1.0.9",
         "@tsconfig/node14": "^1.0.1",
         "@types/jest": "^26.0.24",
         "@types/node": "^16.4.2",

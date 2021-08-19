@@ -60,28 +60,3 @@ py_library(
     deps = ["//gen:core_py_proto"],
 )
 
-
-genrule(
-    name = "core_en_ts",
-    srcs = [ "core_en_types.ts", "core_en.json" ],
-    outs = [ "core_en_ts.ts" ],
-    cmd = " ".join([
-        "cat",
-        "<(echo '// @ts-nocheck')",
-        "$(location core_en_types.ts)",
-        "<(echo 'export default (')",
-        "$(location core_en.json)",
-        "<(echo ');')"
-    ]) + " > $@"
-)
-
-    
-ts_project(
-	name = "core_en_ts_js",
-	srcs = ["core_en_ts.ts"],
-	tsconfig="//:tsconfig",
-	declaration = True,
-    deps = [
-        "@npm//@types/node",
-    ]
-)
