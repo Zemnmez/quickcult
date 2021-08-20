@@ -5,8 +5,6 @@ import fs from 'fs';
 import * as dot from './dot';
 
 
-type ElementIdCache = Map<string, cultist.Element>
-
 export function select<T, S>(values: T[], f: (arg0: T) => S) {
     const cache = new Map<S, T>();
     for (const v of values) cache.set(f(v), v);
@@ -43,19 +41,21 @@ export function elementsByEffects(effects: Record<string, number>, elementById: 
 interface BoardState {
     elements?: cultist.Element[]
     verbs?: cultist.Verb[]
+    legacy?: cultist.Legacy
 }
 
 enum ActionKind { PassTime, ExecuteRecipe, SelectLegacy }
 
 interface SelectLegacy { kind: ActionKind.SelectLegacy, legacy: cultist.Legacy }
 interface PassTime { kind: ActionKind.PassTime, seconds: number }
-interface ExecuteRecipe { kind: ActionKind.ExecuteRecipe, recipe: cultist.Recipe, byPlayerAction: boolean }
+interface ExecuteRecipe { kind: ActionKind.ExecuteRecipe, recipe: [cultist.Recipe, cultist.Element[]], byPlayerAction: boolean }
 type Action = SelectLegacy | PassTime | ExecuteRecipe
 
 
 export function initialBoardStateFromLegacy(l: cultist.Legacy, verbById: (id: string) => cultist.Verb, elementById: (id: string) => cultist.Element): BoardState {
     let board: BoardState = { verbs: l.startingverbid !== undefined? [verbById(l.startingverbid)]: undefined };
     if (l.effects !== undefined) board = applyEffect(board, l.effects, verbById, elementById);
+    board.legacy = l;
     return board;
 }
 
@@ -117,7 +117,6 @@ function* slotsOf(i: Iterable<{ slot?: cultist.Slot} | { slots?: cultist.Slot[]}
 }
 
 function* applyForbidden(slot: Pick<cultist.Slot, 'forbidden' | 'label' | 'id'>, e: Iterable<cultist.Element>) {
-
     const aspects: string[] = Object.entries(slot.forbidden??{})
         .map(([disallowed]) => disallowed);
 
@@ -301,14 +300,58 @@ function stateNodeCaption(s: StateNode) {
 }
 
 
-function SelectLegacy(core: cultist.Core, verbById: (id: string) => cultist.Verb, elementById: (id: string) => cultist.Element): StateNode {
+function* SelectLegacy(core: cultist.Core, verbById: (id: string) => cultist.Verb, elementById: (id: string) => cultist.Element): Generator<StateNode> {
+    for (const legacy of core.legacies) {
+        yield ({
+            createdBy: { kind: ActionKind.SelectLegacy, legacy: legacy },
+            state: initialBoardStateFromLegacy(legacy, verbById, elementById)
+        });
+    }
+}
+
+function applyRecipe(state: BoardState, recipe: [cultist.Recipe, cultist.Element[]], verb: (id: string) => cultist.Verb, element: (id: string) => cultist.Element): BoardState {
+    let newElements: Iterable<cultist.Element> = state.elements??[];
+
+    const [ r, slots ] = recipe;
+
+    let slotid = 0;
+    for (const slot of r.slots??[]) {
+        slotid++;
+        if (slot.consumes) {
+            newElements = remove(newElements, v => v == slots[slotid-1]);
+        }
+    }
+
+    
+    return applyEffect({
+        ...state,
+        elements: [...newElements]
+    }, r.effects ?? {}, verb, element)
+}
+
+function* derivePossibleNextSteps(s: BoardState, core: cultist.Core, verb: (id: string) => cultist.Verb, element: (id: string) => cultist.Element): Generator<StateNode> {
+    if (s.legacy === undefined) {
+        yield *SelectLegacy(core, verb, element);
+    }
+
+
+    for (const recipe of availableRecipes(s, core.recipes, verb, element)) {
+        yield ({
+            createdBy: { kind: ActionKind.ExecuteRecipe, recipe: recipe, byPlayerAction: true },
+            state: applyRecipe(s, recipe, verb, element)
+        });
+    }
+}
+
+function completeTree(s: StateNode, core: cultist.Core, verb: (id: string) => cultist.Verb, element: (id: string) => cultist.Element, toDepth: number = Infinity, depth: number = 0): StateNode {
+    if (depth >= toDepth) {
+        return s;
+    };
+
+    const children = [...derivePossibleNextSteps(s.state??{}, core, verb, element)];
     return {
-        children: core.legacies.map(
-            legacy => ({
-                createdBy: { kind: ActionKind.SelectLegacy, legacy: legacy },
-                state: initialBoardStateFromLegacy(legacy, verbById, elementById)
-            })
-        )
+        ...s,
+        children: children.map(child => completeTree(child, core, verb, element, toDepth, depth+1))
     }
 }
 
@@ -336,8 +379,10 @@ function actionCaption(action: Action): string {
     switch (action.kind) {
     case ActionKind.SelectLegacy:
         return `legacy: ${caption(action.legacy)}`
+    case ActionKind.ExecuteRecipe:
+        return `recipe: ${caption(action.recipe[0])}`
     default:
-        throw "unimplemented"
+        throw new Error(`unimplemented ${ActionKind[action.kind]}`);
     }
 }
 
@@ -355,11 +400,19 @@ function stateNodeToDot(s: StateNode): dot.Digraph {
 
 export const Main = async () => {
     const core: cultist.Core = JSON.parse((await fs.promises.readFile('gen/core_en.json')).toString('utf-8'));
-    const elementById = must(select(core.elements, e => e.id), id => new Error(`Unknown element: ${id}`));
-    const verbById = must(select(core.verbs, v => v.id), id => new Error(`Unknown verb: ${id}`));
 
-    const tree = SelectLegacy(core, verbById, elementById);
+    let element = must(select(core.elements, e => e.id), id => new Error(`Unknown element: ${id}`));
+    element = must(select([
+        ...core.elements,
+        {
+            ...element("auclair_b"),
+            id: "lever_LastFollower",
+        },
+    ], e => e.id), id => new Error(`Unknown element: ${id}`));
 
+    const verb = must(select(core.verbs, v => v.id), id => new Error(`Unknown verb: ${id}`));
+
+    const tree = completeTree({}, core, verb, element, 2);
 
     console.log(stateNodeToDot(tree).toDot());
 }
