@@ -1,6 +1,8 @@
 import * as cultist from './types';
+import { quoteIfNotIdentifier } from './util';
 import immutable from 'immutable';
 import fs from 'fs';
+import * as dot from './dot';
 
 
 type ElementIdCache = Map<string, cultist.Element>
@@ -43,11 +45,13 @@ interface BoardState {
     verbs?: cultist.Verb[]
 }
 
-enum ActionKind {
-    PassTime
-}
+enum ActionKind { PassTime, ExecuteRecipe, SelectLegacy }
 
+interface SelectLegacy { kind: ActionKind.SelectLegacy, legacy: cultist.Legacy }
 interface PassTime { kind: ActionKind.PassTime, seconds: number }
+interface ExecuteRecipe { kind: ActionKind.ExecuteRecipe, recipe: cultist.Recipe, byPlayerAction: boolean }
+type Action = SelectLegacy | PassTime | ExecuteRecipe
+
 
 export function initialBoardStateFromLegacy(l: cultist.Legacy, verbById: (id: string) => cultist.Verb, elementById: (id: string) => cultist.Element): BoardState {
     let board: BoardState = { verbs: l.startingverbid !== undefined? [verbById(l.startingverbid)]: undefined };
@@ -100,11 +104,6 @@ export function* filterRecipesByAvailableActions(recipes: Iterable<cultist.Recip
     }
 }
 
-interface Arrangement {
-    verb: cultist.Verb
-    slotted: cultist.Element[]
-}
-
 function* slotsOf(i: Iterable<{ slot?: cultist.Slot} | { slots?: cultist.Slot[]}>) {
     for (const it of i) {
         if ('slot' in it) {
@@ -117,14 +116,19 @@ function* slotsOf(i: Iterable<{ slot?: cultist.Slot} | { slots?: cultist.Slot[]}
     }
 }
 
-function* applyForbidden({forbidden: s}: Pick<cultist.Slot, 'forbidden'>, e: Iterable<cultist.Element>) {
-    const aspects: string[] = Object.entries(s??{}).map(([disallowed]) => disallowed);
+function* applyForbidden(slot: Pick<cultist.Slot, 'forbidden' | 'label' | 'id'>, e: Iterable<cultist.Element>) {
+
+    const aspects: string[] = Object.entries(slot.forbidden??{})
+        .map(([disallowed]) => disallowed);
+
     const notAllowed = new Set(aspects);
 
     OUTER:
     for (const element of e) {
-        for (const [aspect] of Object.entries(element.aspects??{})) {
-            if (notAllowed.has(aspect)) continue OUTER;
+        for (const [aspect] of aspectsOf(element)) {
+            if (notAllowed.has(aspect)) {
+                 continue OUTER;
+            }
         }
         yield element;
     }
@@ -151,29 +155,53 @@ function some<T>(i: Iterable<T>, f: (i: T) => boolean) {
     return false;
 }
 
-function* applyRequirements({requirements: s}: Pick<cultist.Slot, 'requirements'>, e: Iterable<cultist.Element>) {
-    const aspectRequirement = Object.entries(s??{});
+function aspectsOf(item: Pick<cultist.Element, 'id' | 'aspects'>) {
+    return Object.entries({ ...item.aspects, [item.id]: 1 })
+}
 
-    const requiredAspects = new Map(aspectRequirement.filter(
-        ([aName, intensity]) => intensity > 0
-    ));
 
-    const disallowedAspects = new Map(aspectRequirement.filter(
-        ([aName, intensity]) => intensity < 0
-    ));
+// NB: 'required' and 'requirements' imply different matching: a 'required' needs match *only one*
+// and 'requirements' must ALL match
+function matchesRequired(item: Pick<cultist.Slot, 'id' | 'description' | 'label' | 'required'>) {
+    const spec = Object.entries(item.required??{});
+    const disallowed = new Set();
+    const required = new Map();
 
-    for (const element of e) {
-        const elAspects = Object.entries(element.aspects??{});
 
-        if (elAspects.some(([aspect]) => disallowedAspects.has(aspect))) {
+    for (const [aspect, intensity] of spec) {
+        if (intensity < 0) {
+            disallowed.add(aspect);
             continue;
         }
 
-        const concernedAspects = filter(elAspects, ([aspect]) => requiredAspects.has(aspect));
+        // can probably clobber? but I don't think the game ever does this
+        required.set(aspect, intensity);
+    }
 
-        if (some(concernedAspects, ([aspect, intensity]) => requiredAspects.get(aspect)! < intensity)) continue;
+    return (compareTo: Pick<cultist.Element, 'aspects' | 'description' | 'label' | 'id'>) => {
+        let hasRequired = false;
+        for (const [aspect, intensity] of aspectsOf(compareTo)) {
+            // I don't think anything can have negative intensity, but it doesnt hurt to check
+            if (disallowed.has(aspect) && intensity > 0) {
+                 return false;
+            }
 
-        yield element;
+
+            if (hasRequired || (required.has(aspect) && intensity >= required.get(aspect))) {
+                hasRequired = true
+            }
+        }
+
+        return hasRequired;
+    }
+
+}
+
+function* applyRequirements(slot: cultist.Slot, e: Iterable<cultist.Element>) {
+    const matches = matchesRequired(slot);
+
+    for (const element of e) {
+        if (matches(element)) yield element;
     }
 }
 
@@ -185,17 +213,24 @@ function* elementsValidForSlot(s: cultist.Slot, e: Iterable<cultist.Element>) {
 
 function* elementCombosForVerb(verb: cultist.Verb, slotted: (cultist.Element|undefined)[], elements: cultist.Element[]):
     Generator<[cultist.Verb, (cultist.Element|undefined)[]]> {
-    yield [verb, slotted];
+
     const slots: cultist.Slot[] = [...slotsOf(filter([verb, ...slotted], isDefined))];
+
+
+    yield [verb, slotted];
+
+
     let slotIndex = 0;
     for (const slot of slots) {
-        if (slotted[slotIndex] != undefined) continue;
+        slotIndex++;
+        // cannot fill a slot which already has an element slotted in it
+        if (slotted[slotIndex-1] != undefined) continue;
+
         for (const element of elementsValidForSlot(slot, elements)) {
             const newSlotted = [...slotted];
-            newSlotted[slotIndex] = element;
+            newSlotted[slotIndex-1] = element;
             yield *elementCombosForVerb(verb, newSlotted, [...remove(elements, e => e === element)]);
         }
-        slotIndex++;
     }
 }
 
@@ -208,7 +243,7 @@ function sumAspects(i: Iterable<Pick<cultist.Element, 'aspects'| 'id'> | undefin
     for (const it of i) {
         if (it === undefined) continue;
         sum.set(it.id, (sum.get(it.id)??0) + 1);
-        for (const [aspect, intensity] of Object.entries(it.aspects??{})) {
+        for (const [aspect, intensity] of aspectsOf(it)) {
             sum.set(aspect, (sum.get(aspect)??0) + intensity);
         }
     }
@@ -216,9 +251,11 @@ function sumAspects(i: Iterable<Pick<cultist.Element, 'aspects'| 'id'> | undefin
     return sum;
 }
 
-export function* availableRecipes(board: BoardState, recipes: Iterable<cultist.Recipe>, verb: (id: string) => cultist.Verb, element: (id: string) => cultist.Element) {
-    let rs = filterRecipesByAvailableActions(recipes, board.verbs ?? []);
+export function displayList(...elements: (Pick<cultist.Element, 'label' | 'id'> | undefined)[]): string {
+    return prettyList(elements.map(c => c == undefined? 'undefined' :caption(c)));
+}
 
+export function* availableRecipes(board: BoardState, recipes: Iterable<cultist.Recipe>, verb: (id: string) => cultist.Verb, element: (id: string) => cultist.Element) {
     for (const [ verb, elements ] of elementCombos(board.verbs ?? [], board.elements ?? [])) {
         const sum = sumAspects(elements)
         RECIPE:
@@ -228,17 +265,23 @@ export function* availableRecipes(board: BoardState, recipes: Iterable<cultist.R
 
             for (const [aspect, intensity] of Object.entries(recipe.requirements??{})) {
                 if ((sum.get(aspect) ?? 0) < intensity) continue RECIPE;
+                
             }
 
 
-            yield recipe
+            yield [ recipe, elements ] as [ cultist.Recipe, cultist.Element[]]
         }
     }
 }
 
+export function displayRecipeCombo(recipe: cultist.Recipe, elements: cultist.Element[]): string {
+    return `${recipe.actionid !== undefined? recipe.actionid +"/": ""}${caption(recipe)}: ${prettyList(...elements.map(c => caption(c)))}`
+}
+
 export function caption(r: Pick<cultist.Element, 'id' | 'label' | 'description'> | undefined, desc?: boolean): string {
     if (r === undefined) return "undefined";
-    return `${r.label !== undefined && r.label.trim().length !== 0? r.label: r.id}`
+    const showId = r.label == undefined || r.label.trim().length == 0;
+    return `${showId?r.id:quoteIfNotIdentifier(r.label)}${!showId?` (${r.id})`:""}`
         + (desc && r.description? `: ${r.description}`: "");
 }
 
@@ -246,21 +289,79 @@ export function prettyList(...l: (string | { toString(): string })[] ) {
     return `(${l.length}): ${l.map((l, i, a) => `(${i+1}/${a.length}) ${l?.toString() ?? l}`).join("; ")}`
 }
 
+
+interface StateNode {
+    createdBy?: Action
+    state?: BoardState,
+    children?: StateNode[]
+}
+
+function stateNodeCaption(s: StateNode) {
+    return s?.state?shortBoardState(s.state):"(empty)"
+}
+
+
+function SelectLegacy(core: cultist.Core, verbById: (id: string) => cultist.Verb, elementById: (id: string) => cultist.Element): StateNode {
+    return {
+        children: core.legacies.map(
+            legacy => ({
+                createdBy: { kind: ActionKind.SelectLegacy, legacy: legacy },
+                state: initialBoardStateFromLegacy(legacy, verbById, elementById)
+            })
+        )
+    }
+}
+
+function* walk<T>(root: T, children: (v: T) => T[], path: T[] = []): Generator<T[]> {
+    yield [root, ...path];
+    for (const child of children(root)) {
+        yield *walk(child, children, [root, ...path])
+    }
+}
+
+function* map<I, O>(i: Iterable<I>, f: (i: I) => O): Iterable<O> {
+    for (const it of i) yield f(it);
+}
+
+function shortBoardState(b: BoardState): string {
+    const m = new Map();
+    for (const item of [...b.elements??[], ...b.verbs??[]]) {
+        m.set(item.id, (m.get(item.id)??0) +1)
+    }
+
+    return [...m].map(([k, n]) => `${k}: ${n}`).join(",")
+}
+
+function actionCaption(action: Action): string {
+    switch (action.kind) {
+    case ActionKind.SelectLegacy:
+        return `legacy: ${caption(action.legacy)}`
+    default:
+        throw "unimplemented"
+    }
+}
+
+function stateNodeToDot(s: StateNode): dot.Digraph {
+    return new dot.Digraph(
+        [...map(walk(s, n => n.children ?? []), ([c, p]) => new dot.Connection(
+            stateNodeCaption(p),
+            "->",
+            stateNodeCaption(c),
+            undefined,
+            c.createdBy?actionCaption(c.createdBy):undefined
+        ))]
+    )
+}
+
 export const Main = async () => {
     const core: cultist.Core = JSON.parse((await fs.promises.readFile('gen/core_en.json')).toString('utf-8'));
     const elementById = must(select(core.elements, e => e.id), id => new Error(`Unknown element: ${id}`));
     const verbById = must(select(core.verbs, v => v.id), id => new Error(`Unknown verb: ${id}`));
-    for (const legacy of core.legacies) {
-        const board = initialBoardStateFromLegacy(legacy, verbById, elementById);
 
-        console.log("Legacy: ", caption(legacy))
+    const tree = SelectLegacy(core, verbById, elementById);
 
 
-        console.log(" - Board: ", prettyList(...[...board.elements ?? [], ...board.verbs ?? []].map(e => caption(e))));
-        [...elementCombos(board.verbs??[], board.elements??[])].forEach(([v, e]) => console.log(" - Combo:", caption(v), prettyList(e.map(x => caption(x)))));
-        console.log(" - Recipes:", prettyList(...[...availableRecipes(board, core.recipes, verbById, elementById)].map(e => caption(e))));
-
-    }
+    console.log(stateNodeToDot(tree).toDot());
 }
 
 export default Main;
