@@ -285,7 +285,7 @@ export function caption(r: Pick<cultist.Element, 'id' | 'label' | 'description'>
 }
 
 export function prettyList(...l: (string | { toString(): string })[] ) {
-    return `(${l.length}): ${l.map((l, i, a) => `(${i+1}/${a.length}) ${l?.toString() ?? l}`).join("; ")}`
+    return `(${l.length}): ${l.map((l, i, a) => `(${i+1}/${a.length}) ${l?.toString() ?? l}`).sort().join(";\n ")}`
 }
 
 
@@ -295,8 +295,8 @@ interface StateNode {
     children?: StateNode[]
 }
 
-function stateNodeCaption(s: StateNode) {
-    return s?.state?shortBoardState(s.state):"(empty)"
+function stateNodeCaption(s: StateNode, verb: (id: string) => cultist.Verb, element: (id: string) => cultist.Element) {
+    return s?.state?shortBoardState(s.state, verb, element):"(empty)"
 }
 
 
@@ -366,13 +366,28 @@ function* map<I, O>(i: Iterable<I>, f: (i: I) => O): Iterable<O> {
     for (const it of i) yield f(it);
 }
 
-function shortBoardState(b: BoardState): string {
+function perhaps<T>(...fs: (() => T)[]): T {
+    let errors = [];
+    for (const f of fs) {
+        try {return f()}
+        catch(e){ errors.push(e) }
+    }
+
+    throw errors;
+}
+
+function shortBoardState(b: BoardState, verb: (id: string) => cultist.Verb, element: (id: string) => cultist.Element): string {
     const m = new Map();
     for (const item of [...b.elements??[], ...b.verbs??[]]) {
         m.set(item.id, (m.get(item.id)??0) +1)
     }
 
-    return [...m].map(([k, n]) => `${k}: ${n}`).join(",")
+    return prettyList(...[...m].map(([k, n]) => `${
+        caption(perhaps(
+            () => verb(k),
+            () => element(k)
+        ))
+    }: ${n}`))
 }
 
 function actionCaption(action: Action): string {
@@ -386,12 +401,12 @@ function actionCaption(action: Action): string {
     }
 }
 
-function stateNodeToDot(s: StateNode): dot.Digraph {
+function stateNodeToDot(s: StateNode, verb: (id: string) => cultist.Verb, element: (id: string) => cultist.Element): dot.Digraph {
     return new dot.Digraph(
         [...map(walk(s, n => n.children ?? []), ([c, p]) => new dot.Connection(
-            stateNodeCaption(p),
+            stateNodeCaption(p, verb, element),
             "->",
-            stateNodeCaption(c),
+            stateNodeCaption(c, verb, element),
             undefined,
             c.createdBy?actionCaption(c.createdBy):undefined
         ))]
@@ -412,9 +427,9 @@ export const Main = async () => {
 
     const verb = must(select(core.verbs, v => v.id), id => new Error(`Unknown verb: ${id}`));
 
-    const tree = completeTree({}, core, verb, element, 2);
+    const tree = completeTree({}, core, verb, element, 4);
 
-    console.log(stateNodeToDot(tree).toDot());
+    console.log(stateNodeToDot(tree, verb, element).toDot());
 }
 
 export default Main;
