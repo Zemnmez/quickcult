@@ -45,7 +45,6 @@ interface BoardState {
     verbs?: cultist.Verb[]
 }
 
-<<<<<<< HEAD
 enum ActionKind { PassTime, ExecuteRecipe, SelectLegacy }
 
 interface SelectLegacy { kind: ActionKind.SelectLegacy, legacy: cultist.Legacy }
@@ -53,13 +52,6 @@ interface PassTime { kind: ActionKind.PassTime, seconds: number }
 interface ExecuteRecipe { kind: ActionKind.ExecuteRecipe, recipe: cultist.Recipe, byPlayerAction: boolean }
 type Action = SelectLegacy | PassTime | ExecuteRecipe
 
-=======
-enum ActionKind {
-    PassTime
-}
-
-interface PassTime { kind: ActionKind.PassTime, seconds: number }
->>>>>>> 9f289be20d86390810b17be445167bd03041a24d
 
 export function initialBoardStateFromLegacy(l: cultist.Legacy, verbById: (id: string) => cultist.Verb, elementById: (id: string) => cultist.Element): BoardState {
     let board: BoardState = { verbs: l.startingverbid !== undefined? [verbById(l.startingverbid)]: undefined };
