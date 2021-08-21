@@ -23,3 +23,12 @@ jobs:
         env:
           STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
           STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+  automerge:
+    name: Auto-merge
+    if: github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: fastify/github-action-merge-dependabot@v1
+      with:
+        github-token: ${{secrets.github_token}}
