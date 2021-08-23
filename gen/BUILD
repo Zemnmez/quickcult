@@ -51,8 +51,8 @@ py_proto_library(
     srcs = ["core.proto"],
     deps = [
         "//proto:cultist_py_proto",
-        "@com_google_protobuf//:protobuf_python",
     ],
+    default_runtime = "@com_google_protobuf//:protobuf_python"
 )
 
 py_library(

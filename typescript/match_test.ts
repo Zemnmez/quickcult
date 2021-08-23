@@ -25,7 +25,7 @@ test('match', () => {
 
 	// @ts-expect-error
 	expect(match.match({ name: 'john' })).toEqual(
-	// @ts-expect-error
+		// @ts-expect-error
 		match.match({ name: 'john' })
 	);
 });
