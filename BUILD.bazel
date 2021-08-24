@@ -1,1 +1,32 @@
-/home/ubuntu/devel/quickcult/BUILD.bazel
+# Add rules here to build your software
+# See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
+
+# Allow any ts_library rules in this workspace to reference the config
+# Note: if you move the tsconfig.json file to a subdirectory, you can add an alias() here instead
+#   so that ts_library rules still use it by default.
+#   See https://www.npmjs.com/package/@bazel/typescript#installation
+
+package(default_visibility = [":__subpackages__"])
+load("@npm//@bazel/typescript:index.bzl", "ts_config")
+load("@npm//prettier:index.bzl", "prettier")
+
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "@npm//:node_modules/@tsconfig/node12/tsconfig.json",
+    ],
+)
+
+
+exports_files(
+    ["jest.ts.config.js", ".prettierrc.json", ".gitignore", ".editorconfig"],
+    visibility = ["//visibility:public"],
+)
+
+prettier(
+	name = "prettier",
+)
+
+

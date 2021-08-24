@@ -1,1 +1,3 @@
-/home/ubuntu/devel/quickcult/go.mod
+module github.com/zemnmez/quickcult
+
+go 1.16

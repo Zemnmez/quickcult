@@ -1,1 +1,5 @@
-/home/ubuntu/devel/quickcult/.gitignore
+.bazelrc.user
+dist
+bazel-out
+node_modules
+external
