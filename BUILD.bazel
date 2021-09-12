@@ -25,6 +25,7 @@ ts_config(
 ts_config(
     name = "tsconfig_jsx",
     src = "jsx.tsconfig.json",
+	deps = [ "//typescript/config:jsx" ]
 )
 
 exports_files(
