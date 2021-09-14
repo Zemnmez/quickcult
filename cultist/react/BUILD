@@ -1,20 +1,31 @@
-load("//:rules.bzl", "ts_project", "jest_test", "ts_config")
+load("//:rules.bzl", "jest_test", "ts_config", "ts_project")
 
-package(default_visibility = [ "//visibility:public" ])
+package(default_visibility = ["//visibility:public"])
 
+tsfiles = glob(
+    [
+        "*.ts",
+        "*.tsx",
+    ],
+    exclude = [
+        "*_test.ts",
+        "*_test.tsx",
+    ],
+)
 
-tsfiles = glob(["*.ts", "*.tsx"], exclude = ["*_test.ts", "*_test.tsx"])
 tstestfiles = glob(["*_test.ts"])
 
 ts_project(
     name = "react",
     srcs = tsfiles,
+    allow_js = True,
     declaration = True,
+    preserve_jsx = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
-	    "//cultist",
+        "//cultist",
         "@npm//react",
-    ]
+    ],
 )
 
 """
@@ -39,5 +50,3 @@ jest_test(
 	]
 )
 """
-
-
