@@ -18,13 +18,14 @@ tstestfiles = glob(["*_test.ts"])
 ts_project(
     name = "react",
     srcs = tsfiles,
-    allow_js = True,
+    allow_js = False,
     declaration = True,
     preserve_jsx = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
         "//cultist",
         "@npm//react",
+        "@npm//@types/react"
     ],
 )
 
