@@ -5,29 +5,27 @@
 import * as save from '//cultist/save';
 import * as iter from '//typescript/iter';
 import { optionalChain } from '//typescript/util';
-import immutable from 'immutable';
+import Immutable from 'immutable';
 import { v4 as v4uuid } from 'uuid';
 
 const uuid = { v4: v4uuid };
 
-type ImmutableRecord<V> = immutable.RecordOf<{
+type ImmutableRecord<V> = Immutable.RecordOf<{
 	[k: string]: V;
 }>;
 
 interface MutableState {
-	elementStacks?: immutable.Map<string, ElementInstance>;
+	elementStacks?: Immutable.Map<string, ElementInstance>;
 
-	decks?: immutable.RecordOf<{
-		[name: string]: Deck;
-	}>;
+	decks?: Immutable.Map<string, Deck>;
 
-	metainfo?: immutable.RecordOf<{
+	metainfo?: Immutable.RecordOf<{
 		VERSIONNUMBER?: string;
 	}>;
 
 	characterDetails?: CharacterDetails;
 
-	situations?: immutable.RecordOf<{
+	situations?: Immutable.RecordOf<{
 		[name: string]: Situation;
 	}>;
 }
@@ -45,9 +43,9 @@ export function createElement(
 
 export function addElements(
 	el: Iterable<ElementInstance>,
-	stacks?: immutable.Map<string, ElementInstance>
-): immutable.Map<string, ElementInstance> {
-	if (stacks === undefined) stacks = immutable.Map<string, ElementInstance>();
+	stacks?: Immutable.Map<string, ElementInstance>
+): Immutable.Map<string, ElementInstance> {
+	if (stacks === undefined) stacks = Immutable.Map<string, ElementInstance>();
 
 	return stacks.withMutations(stacks => {
 		for (const element of el) {
@@ -58,9 +56,9 @@ export function addElements(
 	});
 }
 
-export type State = immutable.RecordOf<MutableState>;
+export type State = Immutable.RecordOf<MutableState>;
 
-export const NewState = immutable.Record<MutableState>({
+export const NewState = Immutable.Record<MutableState>({
 	elementStacks: undefined,
 	decks: undefined,
 	metainfo: undefined,
@@ -75,12 +73,23 @@ export function serializeState(s: State): save.State {
 			optionalChain(iter.dict.fromEntries)(s.elementStacks?.entries()),
 			serializeElementInstance
 		),
-		decks: optionalChain(iter.dict.map)(s.decks, serializeDeck),
+		decks: iter.dict.fromEntries([...s?.decks?.entries() ?? []].map(([k, v]) => [k, serializeDeck(v)])),
 		situations: optionalChain(iter.dict.map)(
 			s.situations,
 			SerializeSituation
 		),
 	};
+}
+
+export function deserializeState(s: save.State): State {
+	return NewState({
+		...s,
+		decks: Immutable.Map(optionalChain(iter.dict.map)(s.decks, deserializeDeck)),
+		elementStacks: Immutable.Map(
+			Object.entries(s.elementStacks??{}).map(([k, v]) => [k, deserializeElementInstance(v)])
+		),
+		metainfo: deserializeMetaInfo(s.metainfo)
+	});
 }
 
 export interface MutableElementInstance {
@@ -94,9 +103,9 @@ export interface MutableElementInstance {
 	quantity?: number;
 }
 
-export type ElementInstance = immutable.RecordOf<MutableElementInstance>;
+export type ElementInstance = Immutable.RecordOf<MutableElementInstance>;
 
-export const NewElementInstance = immutable.Record<MutableElementInstance>({
+export const NewElementInstance = Immutable.Record<MutableElementInstance>({
 	lifetimeRemaining: undefined,
 	lastTablePosX: undefined,
 	markedForConsumption: undefined,
@@ -123,22 +132,69 @@ export function serializeElementInstance(
 	};
 }
 
-export type Deck = immutable.RecordOf<{
-	eliminatedCards: string[];
-	cards: string[];
-}>;
+export const deserializeNumber = optionalChain(
+	(e: string) => +e
+);
 
-function serializeDeck({ eliminatedCards, cards }: Deck): save.Deck {
+export const deserializeBoolean = optionalChain(
+	(e: string) => {
+		switch(e.toLowerCase()){
+		case "true": return true;
+		case "false": return false;
+		}
+
+		throw new Error(`Cannot parse as boolean: ${e}`);
+	}
+);
+
+
+export function deserializeElementInstance(e: save.ElementInstance): ElementInstance {
+	return NewElementInstance({
+		...e,
+		lifetimeRemaining: deserializeNumber(e.lifetimeRemaining),
+		lastTablePosX: deserializeNumber(e.lastTablePosX),
+		lastTablePosY: deserializeNumber(e.lastTablePosY),
+		markedForConsumption: deserializeBoolean(e.markedForConsumption),
+		quantity: deserializeNumber(e.quantity),
+	})
+}
+
+interface MutableDeck {
+	eliminatedCards?: Immutable.List<string>;
+	cards?: Immutable.List<string>;
+}
+
+export type Deck = Immutable.RecordOf<MutableDeck>;
+
+export const NewDeck = Immutable.Record<MutableDeck>({});
+
+export function serializeDeck({ eliminatedCards, cards }: Deck): save.Deck {
 	return {
 		eliminatedCards,
 		...Object.assign(
 			{},
-			...cards.map(([card, index]) => ({ [index]: card }))
+			...cards?.map(([card, index]) => ({ [index]: card })) ?? []
 		),
 	};
 }
 
-export type Levers = immutable.RecordOf<{
+export function deserializeDeck(s: save.Deck): Deck {
+	const { eliminatedCards, ...otherCards } = s;
+	let cardList = [];
+
+	for (const [cardInd, card] of Object.entries(otherCards?? {})) {
+		if (card instanceof Array) throw new Error("Should be single card, not multiple");
+		cardList[+cardInd] = card;
+	}
+
+	return NewDeck({
+		...s,
+		eliminatedCards: Immutable.List(eliminatedCards),
+		cards: Immutable.List(cardList)
+	});
+}
+
+export type Levers = Immutable.RecordOf<{
 	lastheadquarters?: string;
 	lastfollower?: string;
 	lastsignificantpainting?: string;
@@ -150,7 +206,7 @@ export type Levers = immutable.RecordOf<{
 	lastdesire?: string;
 }>;
 
-export type CharacterDetails = immutable.RecordOf<{
+export interface MutableCharacterDetails {
 	name?: string;
 	/**
 	 * Just a label, not an ID.
@@ -170,9 +226,23 @@ export type CharacterDetails = immutable.RecordOf<{
 	futureLevers?: Levers;
 
 	activeLegacy?: string;
-}>;
+};
 
-export type Situation = immutable.RecordOf<{
+export type CharacterDetails = Immutable.RecordOf<MutableCharacterDetails>;
+
+export const NewCharacterDetails = Immutable.Record<MutableCharacterDetails>({});
+
+export function serializeNewCharacterDetails(d: CharacterDetails): save.State["characterDetails"] {
+	return {...d}
+}
+
+export function deserializeNewCharacterDetails(d: save.State["characterDetails"]): CharacterDetails {
+	return NewCharacterDetails({
+		...d
+	})
+}
+
+export type Situation = Immutable.RecordOf<{
 	situationStoredElements?: ImmutableRecord<ElementInstance>;
 	verbId?: string;
 	ongoingSlotElements?: ImmutableRecord<ElementInstance>;
@@ -183,7 +253,7 @@ export type Situation = immutable.RecordOf<{
 	situationWindowX?: string;
 	state?: string;
 	situationOutputNotes?: ImmutableRecord<
-		immutable.RecordOf<{
+		Immutable.RecordOf<{
 			title?: string;
 		}>
 	>;
@@ -191,7 +261,7 @@ export type Situation = immutable.RecordOf<{
 	completioncount?: string;
 }>;
 
-function SerializeSituation(s: Situation): save.Situation {
+export function SerializeSituation(s: Situation): save.Situation {
 	return {
 		...s,
 		situationStoredElements: optionalChain(iter.dict.map)(
@@ -206,3 +276,26 @@ function SerializeSituation(s: Situation): save.Situation {
 		situationOutputNotes: s.situationOutputNotes?.toJS() as any,
 	};
 }
+
+
+export interface MutableMetainfo {
+	VERSIONNUMBER?: string
+}
+
+export type MetaInfo = Immutable.RecordOf<MutableMetainfo>;
+
+export const NewMetaInfo = Immutable.Record<MutableMetainfo>({});
+
+export function deserializeMetaInfo(m: save.State["metainfo"]): MetaInfo {
+	return NewMetaInfo({
+		...m
+	});
+}
+
+export function serializemetaInfo(m: MetaInfo): save.State["metainfo"] {
+	return {
+		...m
+	}
+}
+
+

@@ -74,3 +74,14 @@ export interface Situation {
 	situationWindowOpen?: string;
 	completioncount?: string;
 }
+
+
+export const load:
+	(s: string) => State
+=
+	s => {
+		s = s.replace(/\bNULL\b/g, "null");
+
+		return JSON.parse(s);
+	}
+;
