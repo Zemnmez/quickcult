@@ -17,7 +17,7 @@ type ImmutableRecord<V> = Immutable.RecordOf<{
 interface MutableState {
 	elementStacks?: Immutable.Map<string, ElementInstance>;
 
-	decks?: Immutable.Map<string, Deck>;
+	decks?: Immutable.Map<string, Deck | undefined>;
 
 	metainfo?: Immutable.RecordOf<{
 		VERSIONNUMBER?: string;
@@ -25,9 +25,7 @@ interface MutableState {
 
 	characterDetails?: CharacterDetails;
 
-	situations?: Immutable.RecordOf<{
-		[name: string]: Situation;
-	}>;
+	situations?: Immutable.Map<string, Situation | undefined>;
 }
 
 export function createElement(
@@ -74,21 +72,22 @@ export function serializeState(s: State): save.State {
 			serializeElementInstance
 		),
 		decks: iter.dict.fromEntries([...s?.decks?.entries() ?? []].map(([k, v]) => [k, serializeDeck(v)])),
-		situations: optionalChain(iter.dict.map)(
-			s.situations,
-			SerializeSituation
-		),
+		situations: iter.dict.fromEntries([...s?.situations?.entries() ?? []].filter(
+			<T1, T2 extends any>(v: [T1, T2| undefined]): v is [T1, T2] => v[1] !== undefined
+		).map(([k, v]) => [k, serializeSituation(v)]))
 	};
 }
 
 export function deserializeState(s: save.State): State {
 	return NewState({
 		...s,
-		decks: Immutable.Map(optionalChain(iter.dict.map)(s.decks, deserializeDeck)),
+		decks: Immutable.Map(optionalChain(iter.dict.map)(s.decks, optionalChain(deserializeDeck)) ?? {}),
 		elementStacks: Immutable.Map(
 			Object.entries(s.elementStacks??{}).map(([k, v]) => [k, deserializeElementInstance(v)])
 		),
-		metainfo: deserializeMetaInfo(s.metainfo)
+		metainfo: deserializeMetaInfo(s.metainfo),
+		characterDetails: deserializeCharacterDetails(s.characterDetails),
+		situations: Immutable.Map(optionalChain(iter.dict.map)(s.situations, deserializeSituation) ?? {})
 	});
 }
 
@@ -194,7 +193,7 @@ export function deserializeDeck(s: save.Deck): Deck {
 	});
 }
 
-export type Levers = Immutable.RecordOf<{
+export interface MutableLevers {
 	lastheadquarters?: string;
 	lastfollower?: string;
 	lastsignificantpainting?: string;
@@ -204,7 +203,19 @@ export type Levers = Immutable.RecordOf<{
 	lasttool?: string;
 	lastbook?: string;
 	lastdesire?: string;
-}>;
+};
+
+export type Levers = Immutable.RecordOf<MutableLevers>;
+
+export const NewLevers = Immutable.Record<MutableLevers>({});
+
+export function serializeLevers(l: Levers): save.Levers {
+	return {...l}
+}
+
+export function deserializeLevers(l: save.Levers): Levers {
+	return NewLevers({...l});
+}
 
 export interface MutableCharacterDetails {
 	name?: string;
@@ -236,32 +247,34 @@ export function serializeNewCharacterDetails(d: CharacterDetails): save.State["c
 	return {...d}
 }
 
-export function deserializeNewCharacterDetails(d: save.State["characterDetails"]): CharacterDetails {
+export function deserializeCharacterDetails(d: save.State["characterDetails"]): CharacterDetails {
 	return NewCharacterDetails({
-		...d
+		...d,
+		pastLevers: optionalChain(deserializeLevers)(d?.pastLevers),
+		futureLevers: optionalChain(deserializeLevers)(d?.futureLevers)
 	})
 }
 
-export type Situation = Immutable.RecordOf<{
-	situationStoredElements?: ImmutableRecord<ElementInstance>;
+export interface MutableSituation {
+	situationStoredElements?: Map<string, ElementInstance>;
 	verbId?: string;
-	ongoingSlotElements?: ImmutableRecord<ElementInstance>;
+	ongoingSlotElements?: Map<string, ElementInstance>;
 	situationWindowY?: string;
 	title?: string;
 	timeRemaining?: string;
 	recipeId?: string | null;
 	situationWindowX?: string;
 	state?: string;
-	situationOutputNotes?: ImmutableRecord<
-		Immutable.RecordOf<{
-			title?: string;
-		}>
-	>;
+	situationOutputNotes?: Map<string, {title?:string}>;
 	situationWindowOpen?: string;
 	completioncount?: string;
-}>;
+}
 
-export function SerializeSituation(s: Situation): save.Situation {
+export type Situation = Immutable.RecordOf<MutableSituation>;
+
+export const NewSituation = Immutable.Record<MutableSituation>({});
+
+export function serializeSituation(s: Situation): save.Situation {
 	return {
 		...s,
 		situationStoredElements: optionalChain(iter.dict.map)(
@@ -275,6 +288,12 @@ export function SerializeSituation(s: Situation): save.Situation {
 		),
 		situationOutputNotes: s.situationOutputNotes?.toJS() as any,
 	};
+}
+
+export function deserializeSituation(s: save.Situation): Situation {
+	return NewSituation({
+		...s
+	});
 }
 
 
