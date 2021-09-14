@@ -1,4 +1,4 @@
-{
+export const saveStateExampleJson = `{
 	"elementStacks": {
 		"0_-490_cf4b8226-9593-41e6-ab28-30025a910368": {
 			"lifetimeRemaining": "0",
@@ -2695,4 +2695,6 @@
 			"completioncount": "0"
 		}
 	}
-}
+}`
+
+export default saveStateExampleJson;
