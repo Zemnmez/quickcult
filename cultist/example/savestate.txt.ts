@@ -2695,6 +2695,6 @@ export const saveStateExampleJson = `{
 			"completioncount": "0"
 		}
 	}
-}`
+}`;
 
 export default saveStateExampleJson;

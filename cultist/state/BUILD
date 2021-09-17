@@ -2,34 +2,23 @@ load("//:rules.bzl", "ts_project", "jest_test", "ts_config")
 
 package(default_visibility = [ "//visibility:public" ])
 
-
-
-tsfiles = glob(["*.ts"], exclude = ["*_test.ts", "save.ts"])
+tsfiles = glob(["*.ts"], exclude = ["*_test.ts"])
 tstestfiles = glob(["*_test.ts"])
 
 ts_project(
-    name = "cultist",
+    name = "state",
     srcs = tsfiles,
     declaration = True,
     tsconfig = "//:tsconfig_node",
     deps = [
-	    "//cultist/example",
         "//typescript/iter",
+        "//cultist:save",
         "//typescript",
         "@npm//immutable",
-        "@npm//@types/uuid",
-        "//cultist/state",
-        "//cultist:save"
+        "@npm//@types/uuid"
     ]
 )
 
-# Separate project needed for 'save' to prevent dependency cycle.
-ts_project(
-    name = "save",
-    srcs = [ "save.ts"],
-    declaration = True,
-    tsconfig = "//:tsconfig_node"
-)
 
 ts_project(
 	name = "tests_lib_node",
@@ -38,7 +27,8 @@ ts_project(
 	tsconfig = "//:tsconfig_node",
 	deps = [
 		"@npm//@types/jest",
-		":cultist"
+		":state",
+        "//cultist:save",
 	]
 )
 
@@ -46,7 +36,8 @@ jest_test(
 	name = "test",
 	srcs = [ f[:-len(".ts")] + ".js" for f in tstestfiles ],
 	deps = [
-		"//cultist",
+        "//cultist:save",
+		":state",
         "@npm//uuid",
         "@npm//immutable"
 	]
