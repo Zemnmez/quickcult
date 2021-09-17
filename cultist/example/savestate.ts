@@ -3,7 +3,7 @@ export const saveStateExample = {
 		'720_520_7d4fa4bf-8abd-4d48-921c-39009c8368ad': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '720',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'passion',
 			lastTablePosY: '520',
 			quantity: '1',
@@ -11,7 +11,7 @@ export const saveStateExample = {
 		'180_0_0490a073-41c3-40a7-8e1d-90a2c93013cc': {
 			lifetimeRemaining: '106',
 			lastTablePosX: '180',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'mystique',
 			lastTablePosY: '0',
 			quantity: '1',
@@ -19,7 +19,7 @@ export const saveStateExample = {
 		'0_-130_43fde0e6-7bfe-4043-867e-66daa951240c': {
 			lifetimeRemaining: '106',
 			lastTablePosX: '0',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'mystique',
 			lastTablePosY: '-130',
 			quantity: '1',
@@ -27,7 +27,7 @@ export const saveStateExample = {
 		'360_-390_1564be7b-2972-4356-bcf5-bbf5ed14ab87': {
 			lifetimeRemaining: '46',
 			lastTablePosX: '360',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'glimmering',
 			lastTablePosY: '-390',
 			quantity: '1',
@@ -35,7 +35,7 @@ export const saveStateExample = {
 		'450_390_40367bf4-f42e-4123-9f6f-e3d17cbf279b': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '450',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			mutations: {
 				stale: '-1',
 			},
@@ -46,7 +46,7 @@ export const saveStateExample = {
 		'810_-130_7e90e91a-0401-4b44-aad3-166957e41d03': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '810',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'bequestintro',
 			lastTablePosY: '-130',
 			quantity: '1',
@@ -54,7 +54,7 @@ export const saveStateExample = {
 		'540_0_9f0e09ff-77d5-4c51-bfc0-c830cdf5237f': {
 			lifetimeRemaining: '105',
 			lastTablePosX: '540',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'mystique',
 			lastTablePosY: '0',
 			quantity: '1',
@@ -62,7 +62,7 @@ export const saveStateExample = {
 		'90_-260_b63016e7-4c24-46b2-9e56-7d3c16420682': {
 			lifetimeRemaining: '48',
 			lastTablePosX: '90',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'mystique',
 			lastTablePosY: '-260',
 			quantity: '1',
@@ -70,7 +70,7 @@ export const saveStateExample = {
 		'450_-130_9ad24ffb-e629-443a-8a01-58a7cfcd5812': {
 			lifetimeRemaining: '115',
 			lastTablePosX: '450',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'fleeting',
 			lastTablePosY: '-130',
 			quantity: '1',
@@ -78,7 +78,7 @@ export const saveStateExample = {
 		'180_-130_cb3c6121-62d0-42ba-8ccf-a3b78a734557': {
 			lifetimeRemaining: '115',
 			lastTablePosX: '180',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'glimmering',
 			lastTablePosY: '-130',
 			quantity: '1',
@@ -86,7 +86,7 @@ export const saveStateExample = {
 		'270.0001_-130_bf593a50-c2ea-4ed7-8014-08ccfec0237e': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '-90',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'funds',
 			lastTablePosY: '130',
 			quantity: '14',
@@ -94,7 +94,7 @@ export const saveStateExample = {
 		'540_650_57dc9004-fcaa-457d-b28f-b09aed2a28ec': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '540',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'passion',
 			lastTablePosY: '650',
 			quantity: '1',
@@ -102,7 +102,7 @@ export const saveStateExample = {
 		'270_-130_6b13b242-1239-40a2-a645-6473568328a9': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '270',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'dropzone',
 			lastTablePosY: '-130',
 			quantity: '1',
@@ -110,7 +110,7 @@ export const saveStateExample = {
 		'0_0_d315439c-bd2d-4b24-8d76-247cb700b27c': {
 			lifetimeRemaining: '223',
 			lastTablePosX: '0',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'mystique',
 			lastTablePosY: '0',
 			quantity: '1',
@@ -118,7 +118,7 @@ export const saveStateExample = {
 		'90_0_95740fdd-f984-49d3-b9ab-57c14effec5c': {
 			lifetimeRemaining: '160',
 			lastTablePosX: '90',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'mystique',
 			lastTablePosY: '0',
 			quantity: '1',
@@ -126,7 +126,7 @@ export const saveStateExample = {
 		'270_650_3ed2df1b-cb67-40d4-b06a-bde076c2c308': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '-90',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'health',
 			lastTablePosY: '130',
 			quantity: '2',
@@ -134,7 +134,7 @@ export const saveStateExample = {
 		'270_520_f29e21f6-721c-4c54-ba2c-b067000766d4': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '-90',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'reason',
 			lastTablePosY: '130',
 			quantity: '4',
@@ -142,7 +142,7 @@ export const saveStateExample = {
 		'809.9999_520_577bdd5a-cec4-4b33-88ef-728d09e5d8ac': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '810',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'passion',
 			lastTablePosY: '520',
 			quantity: '1',
@@ -150,7 +150,7 @@ export const saveStateExample = {
 		'-90_130_cb3c9e4f-c92f-44db-afd9-529a6751308c': {
 			lifetimeRemaining: '134',
 			lastTablePosX: '-90',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'affliction',
 			lastTablePosY: '130',
 			quantity: '1',
@@ -158,7 +158,7 @@ export const saveStateExample = {
 		'180_520_63bf8be6-65ff-4a7c-abba-f6eec139cee5': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '180',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'skillreasonc',
 			lastTablePosY: '520',
 			quantity: '1',
@@ -166,7 +166,7 @@ export const saveStateExample = {
 		'-1080_520_0dc91173-dd35-4e1c-b533-12a87131b77a': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '-1080',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'defaulthunter',
 			lastTablePosY: '520',
 			quantity: '1',
@@ -174,7 +174,7 @@ export const saveStateExample = {
 		'270_-390_7c1bd2dc-6399-4a31-9be6-a8b0a3edd5db': {
 			lifetimeRemaining: '46',
 			lastTablePosX: '270',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'glimmering',
 			lastTablePosY: '-390',
 			quantity: '1',
@@ -182,7 +182,7 @@ export const saveStateExample = {
 		'360_130_049042c7-b399-418f-8a74-a3992e88c152': {
 			lifetimeRemaining: '160',
 			lastTablePosX: '360',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'mystique',
 			lastTablePosY: '130',
 			quantity: '1',
@@ -190,7 +190,7 @@ export const saveStateExample = {
 		'360_-130_18b765b8-b4f9-4a04-8ba8-b342208b7da8': {
 			lifetimeRemaining: '35',
 			lastTablePosX: '360',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'restlessness',
 			lastTablePosY: '-130',
 			quantity: '1',
@@ -198,7 +198,7 @@ export const saveStateExample = {
 		'450_650_4987464c-10c9-41a2-a3a6-7b0bb50db956': {
 			lifetimeRemaining: '0',
 			lastTablePosX: '450',
-			markedForConsumption: 'False',
+			markedForConsumption: 'False' as const,
 			elementId: 'passion',
 			lastTablePosY: '650',
 			quantity: '1',
@@ -2678,7 +2678,7 @@ export const saveStateExample = {
 				'slot_storage_ec44282a-03ee-4ce7-9f6d-1b72b9f06dc5': {
 					lifetimeRemaining: '1',
 					lastTablePosX: '0',
-					markedForConsumption: 'False',
+					markedForConsumption: 'False' as const,
 					elementId: 'seasondespair',
 					lastTablePosY: '0',
 					quantity: '1',
@@ -2689,7 +2689,7 @@ export const saveStateExample = {
 				'Expenses_c0ba1e54-1016-4074-b9f2-34849347942b': {
 					lifetimeRemaining: '0',
 					lastTablePosX: '90',
-					markedForConsumption: 'False',
+					markedForConsumption: 'False' as const,
 					elementId: 'funds',
 					lastTablePosY: '-130',
 					quantity: '1',
@@ -2706,7 +2706,7 @@ export const saveStateExample = {
 					title: "Time, the sundial's shadow, passes. I must have Funds to live, or I will become ill.",
 				},
 			},
-			situationWindowOpen: 'False',
+			situationWindowOpen: 'False' as const,
 			situationWindowZ: '-100',
 			completioncount: '0',
 		},
@@ -2714,7 +2714,7 @@ export const saveStateExample = {
 			timeRemaining: '8.399929',
 			recipeId: 'workhealthskillc',
 			state: 'Ongoing',
-			situationWindowOpen: 'False',
+			situationWindowOpen: 'False' as const,
 			situationWindowX: '-527.6758',
 			situationWindowZ: '-100',
 			situationOutputNotes: {
@@ -2729,7 +2729,7 @@ export const saveStateExample = {
 				'slot_storage_c00d9752-8fca-42a2-acdb-96b2b7fc2a33': {
 					lifetimeRemaining: '0',
 					lastTablePosX: '270',
-					markedForConsumption: 'False',
+					markedForConsumption: 'False' as const,
 					elementId: 'health',
 					lastTablePosY: '650',
 					quantity: '1',
@@ -2737,7 +2737,7 @@ export const saveStateExample = {
 				'slot_storage_889dc3e3-63db-46b1-925d-539d7a8a3683': {
 					lifetimeRemaining: '0',
 					lastTablePosX: '180',
-					markedForConsumption: 'False',
+					markedForConsumption: 'False' as const,
 					elementId: 'skillhealthc',
 					lastTablePosY: '650',
 					quantity: '1',
@@ -2749,7 +2749,7 @@ export const saveStateExample = {
 			timeRemaining: '0',
 			recipeId: null, // originally NULL in all caps (I don't know why)
 			state: 'Unstarted',
-			situationWindowOpen: 'False',
+			situationWindowOpen: 'False' as const,
 			situationWindowX: '-257.6758',
 			situationWindowZ: '-100',
 			situationOutputNotes: {
@@ -2766,7 +2766,7 @@ export const saveStateExample = {
 			timeRemaining: '0',
 			recipeId: null, // orignally 'NULL' in all caps (idk why)
 			state: 'Unstarted',
-			situationWindowOpen: 'False',
+			situationWindowOpen: 'False' as const,
 			situationWindowX: '12.32416',
 			situationWindowZ: '-100',
 			situationOutputNotes: {
