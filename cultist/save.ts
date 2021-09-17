@@ -2,12 +2,12 @@ export type Boolean = 'True' | 'False';
 export type Number = string;
 
 export interface ElementInstance {
-	lifetimeRemaining?: Number;
-	lastTablePosX?: Number;
-	lastTablePosY?: Number;
-	markedForConsumption?: Boolean;
+	lifetimeRemaining?: number;
+	lastTablePosX?: number;
+	lastTablePosY?: number;
+	markedForConsumption?: boolean;
 	elementId?: string;
-	quantity?: Number;
+	quantity?: number;
 }
 
 export interface State {

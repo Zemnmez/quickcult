@@ -1,10 +1,8 @@
 import * as State from '//cultist/state';
 import * as Save from '//cultist/save';
 
-function roundTrip<I, O>(a: (v: I) => O, b: (v: O) => I):
-	(v: I) => I {
-
-	return (v: I) => b(a(v))
+function roundTrip<I, O>(a: (v: I) => O, b: (v: O) => I): (v: I) => I {
+	return (v: I) => b(a(v));
 }
 
 test('round trip serialization', () => {
@@ -18,10 +16,11 @@ test('round trip serialization', () => {
 
 	{
 		const st = State.deserialize.elementInstance(ElementInstanceExample);
-		expect(st).toEqual(roundTrip(
-			State.serialize.elementInstance,
-			State.deserialize.elementInstance
-		)(st));
+		expect(st).toEqual(
+			roundTrip(
+				State.serialize.elementInstance,
+				State.deserialize.elementInstance
+			)(st)
+		);
 	}
-
 });
