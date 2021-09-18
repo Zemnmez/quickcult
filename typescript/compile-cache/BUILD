@@ -7,7 +7,7 @@ ts_project(
     declaration = True,
     tsconfig = "//:tsconfig_node",
     deps = [ "@npm//@types/node" ],
-    tsc=None
+    tsc="@npm//ttypescript/bin:ttsc"
 )
 
 
