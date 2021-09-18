@@ -25,10 +25,10 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
 
 
 
-def ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
+def ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", tsc = "//typescript/compile", **kwargs):
     _ts_project(
         name = name,
-        tsc = "@npm//ttypescript/bin:ttsc",
+        tsc = tsc,
 	srcs = srcs,
         deps = deps + ["@npm//typescript-transform-paths"],
         tags = tags,

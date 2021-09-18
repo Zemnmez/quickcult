@@ -6,7 +6,8 @@ ts_project(
     srcs = [ "index.ts" ],
     declaration = True,
     tsconfig = "//:tsconfig_node",
-    deps = [ "@npm//@types/node" ]
+    deps = [ "@npm//@types/node" ],
+    tsc=None
 )
 
 
