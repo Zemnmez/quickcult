@@ -1,7 +1,10 @@
+"""
+This module contains generic bazel build rules for the project.
+"""
+
 load("//tools/jest:jest.bzl",  _jest_test = "jest_test")
-load("@npm//@bazel/typescript:index.bzl", _ts_project = "ts_project")
+load("@npm//@bazel/typescript:index.bzl", _ts_project = "ts_project", _ts_config = "ts_config" )
 load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
-load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config")
 load("@build_bazel_rules_nodejs//:index.bzl", _nodejs_binary = "nodejs_binary")
 
 def nodejs_binary(**kwargs):
