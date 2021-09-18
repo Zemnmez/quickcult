@@ -4,7 +4,7 @@
 	"private": true,
 	"devDependencies": {
 		"@bazel/bazelisk": "latest",
-		"@bazel/buildifier": "latest",
+		"@bazel/buildifier": "^4.2.1",
 		"@bazel/ibazel": "latest",
 		"@bazel/typescript": "latest",
 		"@types/jest": "^26.0.24",
@@ -32,7 +32,9 @@
 	"scripts": {
 		"build": "yarn bazel build //...",
 		"test": "yarn bazel test //...",
-		"fix": "yarn run eslint --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.json'"
+		"fix_build": "bash -c \"git ls-files | grep -P 'BUILD(?:\\.(?:bzl|bazel))?' | xargs yarn run buildifier --lint fix \" ",
+		"fix_js": "yarn run eslint --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.json'",
+		"fix": "yarn run fix_build && yarn run fix_js"
 	},
 	"dependencies": {
 		"@bazel/labs": "^3.8.0",
