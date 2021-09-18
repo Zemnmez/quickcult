@@ -1,6 +1,5 @@
 # Bazel workspace created by @bazel/create 3.7.0
 
-load("@apple_rules_lint//lint:repositories.bzl", "lint_deps")
 
 # Needed by Protobuf
 bind(
