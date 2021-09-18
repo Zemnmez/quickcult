@@ -4,7 +4,10 @@ package(default_visibility = ["//visibility:public"])
 
 tsfiles = glob(
     ["*.ts"],
-    exclude = ["*_test.ts", "save.ts"],
+    exclude = [
+        "*_test.ts",
+        "save.ts",
+    ],
 )
 
 tstestfiles = glob(["*_test.ts"])
@@ -27,9 +30,10 @@ ts_project(
 # Separate project needed for 'save' to prevent dependency cycle.
 ts_project(
     name = "save",
-    srcs = [ "save.ts"],
+    srcs = ["save.ts"],
+    composite = True,
     declaration = True,
-    tsconfig = "//:tsconfig_node"
+    tsconfig = "//:tsconfig_node",
 )
 
 ts_project(
