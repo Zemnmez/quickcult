@@ -41,16 +41,16 @@ exports_files(
 build_files = glob([
     "**/BUILD",
     "**/*.bzl",
-	"**/*.bazel"
+    "**/*.bazel",
 ])
-
-print(build_files)
 
 buildifier_test(
     name = "bzl_format",
     args = [
         "--lint",
         "warn",
+        "--mode",
+        "diff",
     ] + build_files,
     data = build_files,
 )
