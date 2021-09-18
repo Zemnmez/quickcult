@@ -1,13 +1,13 @@
-export type Boolean = 'True' | 'False';
-export type Number = string;
+export type Boolean_ = 'True' | 'False';
+export type Number_ = string;
 
 export interface ElementInstance {
-	lifetimeRemaining?: Number;
-	lastTablePosX?: Number;
-	lastTablePosY?: Number;
-	markedForConsumption?: Boolean;
+	lifetimeRemaining?: Number_;
+	lastTablePosX?: Number_;
+	lastTablePosY?: Number_;
+	markedForConsumption?: Boolean_;
 	elementId?: string;
-	quantity?: Number;
+	quantity?: Number_;
 }
 
 export interface State {

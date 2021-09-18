@@ -25,16 +25,14 @@ test('round trip serialization', () => {
 	}
 
 	const DeckExample: Save.Deck = {
-		eliminatedCards: [ "card1", "card2", "card3" ],
-		cards: ["card4", "card5" ]
-	}
+		eliminatedCards: ['card1', 'card2', 'card3'],
+		cards: ['card4', 'card5'],
+	};
 
 	{
 		const st = State.deserialize.deck(DeckExample);
 		expect(st).toEqual(
-			roundTrip(
-				State.serialize.deck,
-				State.deserialize.deck
-		)(st);
+			roundTrip(State.serialize.deck, State.deserialize.deck)(st)
+		);
 	}
 });

@@ -1,4 +1,4 @@
-load("//:rules.bzl", "jest_test", "ts_config", "ts_project")
+load("//:rules.bzl", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -24,8 +24,8 @@ ts_project(
     tsconfig = "//:tsconfig_jsx",
     deps = [
         "//cultist",
+        "@npm//@types/react",
         "@npm//react",
-        "@npm//@types/react"
     ],
 )
 

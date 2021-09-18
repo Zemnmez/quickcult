@@ -32,11 +32,11 @@ export function state(s: Save.State): State.State {
 	});
 }
 
-function number(s: Save.Number): State.Number {
+function number(s: Save.Number_): State.Number {
 	return parseInt(s);
 }
 
-export const boolean = (e: Save.Boolean): State.Boolean => {
+export const boolean = (e: Save.Boolean_): State.Boolean => {
 	switch (e.toLowerCase()) {
 		case 'true':
 			return true;

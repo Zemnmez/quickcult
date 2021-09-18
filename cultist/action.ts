@@ -1,4 +1,4 @@
-import * as state from '//cultist/state';
+import * as state from '//cultist/state/index';
 import immutable from 'immutable';
 import * as cultist from '//cultist/types';
 import * as iter from '//typescript/iter';

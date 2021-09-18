@@ -31,11 +31,11 @@ export function state(s: State.State): Save.State {
 	};
 }
 
-export function boolean(b: State.Boolean): Save.Boolean {
+export function boolean(b: State.Boolean): Save.Boolean_ {
 	return b ? 'True' : 'False';
 }
 
-export function number(b: State.Number): Save.Number {
+export function number(b: State.Number): Save.Number_ {
 	return b.toString();
 }
 
