@@ -4,7 +4,7 @@ package(default_visibility = ["//visibility:public"])
 
 tsfiles = glob(
     ["*.ts"],
-    exclude = ["*_test.ts"],
+    exclude = ["*_test.ts", "save.ts"],
 )
 
 tstestfiles = glob(["*_test.ts"])
