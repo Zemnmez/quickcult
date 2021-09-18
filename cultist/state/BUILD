@@ -27,6 +27,7 @@ ts_project(
 ts_project(
     name = "tests_lib_node",
     srcs = tstestfiles,
+    composite = True,
     declaration = True,
     tsconfig = "//:tsconfig_node",
     deps = [
