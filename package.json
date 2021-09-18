@@ -4,9 +4,9 @@
 	"private": true,
 	"devDependencies": {
 		"@bazel/bazelisk": "latest",
-		"@bazel/buildifier": "latest",
+		"@bazel/buildifier": "^4.2.1",
 		"@bazel/ibazel": "latest",
-		"@bazel/typescript": "latest",
+		"@bazel/typescript": "^4.2.0",
 		"@types/jest": "^26.0.24",
 		"@types/node": "^16.4.2",
 		"@types/react": "17.0.20",
