@@ -32,14 +32,6 @@ ts_project(
 
 # Separate project needed for 'save' to prevent dependency cycle.
 ts_project(
-    name = "save",
-    srcs = ["save.ts"],
-    composite = True,
-    declaration = True,
-    tsconfig = "//:tsconfig_node",
-)
-
-ts_project(
     name = "tests",
     srcs = tstestfiles,
     composite = True,
