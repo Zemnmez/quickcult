@@ -66,7 +66,9 @@ export function deck(s: Save.Deck): State.Deck {
 
 	for (const [cardInd, card] of Object.entries(otherCards ?? {})) {
 		if (card instanceof Array)
-			throw new Error('Should be single card, not multiple');
+			throw new Error(
+				`'${cardInd}' should be single card, not multiple ${card}`
+			);
 		cardList[+cardInd] = card;
 	}
 
