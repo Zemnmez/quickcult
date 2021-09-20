@@ -15,12 +15,13 @@ glob_exclusions = [ "next.config.ts", ".next/**"]
 next_deps = [
         "//cultist/multiplayer/public",
         "//cultist/multiplayer/styles",
-        "//cultist/multiplayer/pages",
+        "//cultist/multiplayer/pages:js",
         ":next.config.js",
         ":tsconfig_next",
         "//:tsconfig.json",
         "//:jsx.tsconfig.json",
-        "//typescript/config:jsx.tsconfig.json"
+        "//typescript/config:jsx.tsconfig.json",
+        "//cultist/react"
     ]
 
 
@@ -41,9 +42,10 @@ genrule(
     srcs = next_deps,
     outs = ["build.tar.gz"],
     cmd = """
-        $(execpath @npm//next/bin:next) build ./cultist/multiplayer &&
-        $(execpath @npm//next/bin:next) export ./cultist/multiplayer &&
-        tar -czvf $@ ./cultist/multiplayer/out
+        NEXT_ROOT=./cultist/multiplayer;
+        $(execpath @npm//next/bin:next) build $$NEXT_ROOT &&
+        $(execpath @npm//next/bin:next) export $$NEXT_ROOT &&
+        tar -czvf $@ $$NEXT_ROOT/out
     """,
     exec_tools = [
         "@npm//next/bin:next",

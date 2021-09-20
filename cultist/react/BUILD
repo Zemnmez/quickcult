@@ -1,4 +1,5 @@
 load("//:rules.bzl", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -16,7 +17,7 @@ tsfiles = glob(
 tstestfiles = glob(["*_test.ts"])
 
 ts_project(
-    name = "react",
+    name = "ts",
     srcs = tsfiles,
     allow_js = False,
     composite = True,
@@ -24,10 +25,15 @@ ts_project(
     preserve_jsx = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
-        "//cultist",
+        "//cultist:ts",
         "@npm//@types/react",
         "@npm//react",
     ],
+)
+
+js_library(
+    name = "js",
+    srcs = ["board.js", "index.js"]
 )
 
 """

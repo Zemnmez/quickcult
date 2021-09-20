@@ -45,7 +45,6 @@ build_files = glob([
     "**/*.bazel",
 ])
 
-print(build_files)
 
 buildifier_test(
     name = "bzl_format",

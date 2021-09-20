@@ -1,7 +1,8 @@
 load("//:rules.bzl", "jest_test", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 
 ts_project(
-    name = "pages",
+    name = "ts",
     srcs = glob(
         include = ["*.ts", "*.tsx"],
         exclude = ["*_test.ts"],
@@ -18,4 +19,9 @@ ts_project(
         "//cultist/multiplayer/styles",
     ],
     visibility = ["//cultist/multiplayer:__subpackages__"]
+)
+
+js_library(
+    name = "js",
+    srcs = [ "_app.js", "demo.js", "index.js" ]
 )
