@@ -11,7 +11,10 @@ def ts_config(**kwargs):
     _ts_config(**kwargs)
 
 def jest_test(project_deps = [], deps = [], **kwargs):
-    _jest_test(**kwargs)
+    _jest_test(
+        deps = deps + [ x + "_js" for x in project_deps ],
+        **kwargs
+    )
 
 def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     targets = srcs + data

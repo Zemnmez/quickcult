@@ -27,7 +27,7 @@ ts_project(
 )
 
 ts_project(
-    name = "tests_lib_node",
+    name = "tests",
     srcs = tstestfiles,
     composite = True,
     declaration = True,
@@ -41,8 +41,10 @@ ts_project(
 jest_test(
     name = "test",
     srcs = [f[:-len(".ts")] + ".js" for f in tstestfiles],
+    project_deps = [
+        ":tests"
+    ],
     deps = [
-        ":tests_lib_node_js",
         "@npm//immutable",
         "@npm//uuid",
     ],
