@@ -13,12 +13,12 @@
 		"noImplicitAny": true,
 		"noImplicitOverride": true,
 		"noImplicitThis": true,
-		"noPropertyAccessFromIndexSignature": true,
 		"declaration": true,
 		"preserveSymlinks": true,
 		"forceConsistentCasingInFileNames": true,
 		"downlevelIteration": true,
 		"composite": true,
+		"skipLibCheck": true,
 		"paths": {
 			"//*": [
 				"*",

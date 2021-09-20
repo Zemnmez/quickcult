@@ -19,6 +19,7 @@ ts_project(
     name = "react",
     srcs = tsfiles,
     allow_js = False,
+    composite = True,
     declaration = True,
     preserve_jsx = True,
     tsconfig = "//:tsconfig_jsx",

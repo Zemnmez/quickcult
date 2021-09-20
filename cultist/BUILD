@@ -20,6 +20,7 @@ ts_project(
     tsconfig = "//:tsconfig_node",
     deps = [
         "//cultist/example",
+        "//cultist/state",
         "//typescript",
         "//typescript/iter",
         "@npm//@types/uuid",

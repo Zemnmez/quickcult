@@ -1,12 +1,11 @@
 import exampleSave from '//cultist/example/savestate.txt';
 import * as board from '//cultist/react';
 import * as cultist from '//cultist';
-import * as state from '//cultist/state';
 import type { NextPage as Page } from 'next';
-import React from 'react';
+import * as React from 'react';
 
 const page: Page = () => <>
-	<board.Board state={state.deserialize.state(cultist.save.load(exampleSave))}/>
+	<board.Board state={cultist.state.deserialize.state(cultist.save.load(exampleSave))}/>
 </>
 
 
