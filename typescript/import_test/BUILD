@@ -6,7 +6,7 @@ ts_project(
     composite = True,
     declaration = True,
     tsconfig = "//:tsconfig_node",
-    deps = [":b"],
+    project_deps = [":b"],
 )
 
 ts_project(
@@ -23,8 +23,10 @@ ts_project(
     composite = True,
     declaration = True,
     tsconfig = "//:tsconfig_node",
+    project_deps = [
+        ":a"
+    ],
     deps = [
-        ":a",
         "@npm//@types/jest",
     ],
 )
@@ -32,5 +34,5 @@ ts_project(
 jest_test(
     name = "import_test",
     srcs = ["import_test.js"],
-    deps = [":a"],
+    deps = [":a_js"],
 )
