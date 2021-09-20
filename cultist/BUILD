@@ -17,6 +17,7 @@ ts_project(
     srcs = tsfiles,
     composite = True,
     declaration = True,
+    incremental = True,
     tsconfig = "//:tsconfig_node",
     deps = [
         "//cultist/example",
@@ -42,6 +43,7 @@ ts_project(
     srcs = tstestfiles,
     composite = True,
     declaration = True,
+    incremental = True,
     tsconfig = "//:tsconfig_node",
     deps = [
         ":cultist",

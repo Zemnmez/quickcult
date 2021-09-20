@@ -19,6 +19,7 @@
 		"downlevelIteration": true,
 		"composite": true,
 		"skipLibCheck": true,
+		"incremental": true,
 		"paths": {
 			"//*": [
 				"*",

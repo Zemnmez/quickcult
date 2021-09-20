@@ -12,6 +12,7 @@ ts_project(
     srcs = ["collate_game_core.ts"],
     composite = True,
     declaration = True,
+    incremental = True,
     tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/node",
