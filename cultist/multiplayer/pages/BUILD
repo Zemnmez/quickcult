@@ -9,6 +9,7 @@ ts_project(
     ),
     composite = True,
     declaration = True,
+    incremental = True,
     project_deps = [
         "//cultist/example:example",
         "//cultist/react:react",

@@ -45,10 +45,15 @@ def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None
         **kwargs
     )
 
+    js_srcs = [ src[:src.rfind(".")] + ".js" for src in srcs ]
+
+    if preserve_jsx:
+        js_srcs = [ src.replace(".ts", ".js").replace("tsx", ".jsx") for src in srcs ]
+
     js_library(
         name = name + "_js",
         deps = [ append_tag(dep, "_js") for dep in project_deps ] + deps,
-        srcs = [ src[:src.rfind(".")] + ".js" for src in srcs ],
+        srcs = js_srcs,
         **kwargs
     )
 
