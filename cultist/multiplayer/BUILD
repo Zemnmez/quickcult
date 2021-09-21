@@ -1,14 +1,6 @@
 load("@npm//next:index.bzl", "next")
 load("//:rules.bzl", "ts_config", "ts_lint", "ts_project")
 
-ts_lint(
-    name = "lint",
-    data = glob([
-        "**/*.ts",
-        "**/*.js",
-    ]),
-)
-
 built_next_config_files = [":next.config.js"]
 glob_exclusions = [ "next.config.ts", ".next/**"]
 
