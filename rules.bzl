@@ -32,7 +32,7 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     )
 
 
-def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None, composite = False, tsconfig = "//:tsconfig", declaration = False, preserve_jsx = None, **kwargs):
+def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None, resolve_json_module = None, composite = False, tsconfig = "//:tsconfig", declaration = False, preserve_jsx = None, **kwargs):
     __ts_project(
         name = name + "_ts",
         deps = deps + [append_tag(dep, "_ts") for dep in project_deps ],
@@ -42,6 +42,7 @@ def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None
         tsconfig = tsconfig,
         preserve_jsx = preserve_jsx,
         incremental = incremental,
+        resolve_json_module = resolve_json_module,
         **kwargs
     )
 

@@ -21,11 +21,12 @@ next_deps = [
 
 next(
     name = "next",
-    args = [
-        "./cultist/multiplayer",
+    templated_args = [
+        "$(rootpath //cultist/multiplayer/pages:pages_js)/cultist/multiplayer",
         "next",
     ],
     data = next_deps,
+    link_workspace_root = True
 )
 
 genrule(
@@ -52,6 +53,7 @@ next(
     ],
     data = next_deps,
 )
+
 
 ts_project(
     name = "config_js",
