@@ -4,6 +4,11 @@ load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
 load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config")
 load("@build_bazel_rules_nodejs//:index.bzl", _nodejs_binary = "nodejs_binary", "js_library")
 
+def append_tag(selector, tag):
+    if selector.startswith("//") and (":" not in selector):
+        return selector + ":" + selector[selector.rfind("/")+1:] + tag
+    return selector + tag
+
 def nodejs_binary(**kwargs):
     _nodejs_binary(**kwargs)
 
@@ -12,7 +17,7 @@ def ts_config(**kwargs):
 
 def jest_test(project_deps = [], deps = [], **kwargs):
     _jest_test(
-        deps = deps + [ x + "_js" for x in project_deps ],
+        deps = deps + [ append_tag(x, "_js") for x in project_deps ],
         **kwargs
     )
 
@@ -30,7 +35,7 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
 def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None, composite = False, tsconfig = "//:tsconfig", declaration = False, preserve_jsx = None, **kwargs):
     __ts_project(
         name = name + "_ts",
-        deps = deps + [dep + "_ts" for dep in project_deps ],
+        deps = deps + [append_tag(dep, "_ts") for dep in project_deps ],
         srcs = srcs,
         composite = composite,
         declaration = declaration,
@@ -42,7 +47,7 @@ def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None
 
     js_library(
         name = name + "_js",
-        deps = [ dep + "_js" for dep in project_deps ] + deps,
+        deps = [ append_tag(dep, "_js") for dep in project_deps ] + deps,
         srcs = [ src[:src.rfind(".")] + ".js" for src in srcs ],
         **kwargs
     )

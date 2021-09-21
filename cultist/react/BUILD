@@ -17,23 +17,20 @@ tsfiles = glob(
 tstestfiles = glob(["*_test.ts"])
 
 ts_project(
-    name = "ts",
+    name = "react",
     srcs = tsfiles,
-    allow_js = False,
     composite = True,
     declaration = True,
     preserve_jsx = True,
+    incremental = True,
     tsconfig = "//:tsconfig_jsx",
+    project_deps = [
+        "//cultist:cultist",
+    ],
     deps = [
-        "//cultist:ts",
         "@npm//@types/react",
         "@npm//react",
     ],
-)
-
-js_library(
-    name = "js",
-    srcs = ["board.js", "index.js"]
 )
 
 """

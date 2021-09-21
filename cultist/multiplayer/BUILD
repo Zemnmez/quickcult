@@ -15,13 +15,13 @@ glob_exclusions = [ "next.config.ts", ".next/**"]
 next_deps = [
         "//cultist/multiplayer/public",
         "//cultist/multiplayer/styles",
-        "//cultist/multiplayer/pages:js",
+        "//cultist/multiplayer/pages:pages_js",
         ":next.config.js",
         ":tsconfig_next",
         "//:tsconfig.json",
         "//:jsx.tsconfig.json",
         "//typescript/config:jsx.tsconfig.json",
-        "//cultist/react"
+        "//cultist/react:react_js"
     ]
 
 
