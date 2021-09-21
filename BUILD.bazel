@@ -45,7 +45,6 @@ build_files = glob([
     "**/*.bazel",
 ])
 
-
 buildifier_test(
     name = "bzl_format",
     args = [

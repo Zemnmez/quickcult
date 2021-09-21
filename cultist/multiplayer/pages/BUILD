@@ -1,10 +1,12 @@
-load("//:rules.bzl", "jest_test", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+load("//:rules.bzl", "ts_project")
 
 ts_project(
     name = "pages",
     srcs = glob(
-        include = ["*.ts", "*.tsx"],
+        include = [
+            "*.ts",
+            "*.tsx",
+        ],
         exclude = ["*_test.ts"],
     ),
     composite = True,
@@ -13,10 +15,10 @@ ts_project(
     project_deps = [
         "//cultist/example:example",
         "//cultist/react:react",
-        "//cultist:cultist"
+        "//cultist:cultist",
     ],
+    visibility = ["//cultist/multiplayer:__subpackages__"],
     deps = [
         "@npm//next",
     ],
-    visibility = ["//cultist/multiplayer:__subpackages__"]
 )

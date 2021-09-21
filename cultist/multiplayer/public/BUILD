@@ -4,12 +4,9 @@ files = glob(["**/*"])
 
 filegroup(
     name = "public",
-    srcs=files
+    srcs = files,
 )
 
 exports_files(
-    files
+    files,
 )
-
-
-

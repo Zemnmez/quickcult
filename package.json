@@ -24,7 +24,7 @@
 		"onchange": "^7.1.0",
 		"prettier": "^2.4.0",
 		"ts-node": "^10.2.1",
-        "react-dom": "17.0.2",
+		"react-dom": "17.0.2",
 		"react": "17.0.2",
 		"ttypescript": "^1.5.12",
 		"typescript-transform-paths": "^3.3.1",
@@ -47,6 +47,6 @@
 	"resolutions": {
 		"@types/react": "^17.0.20",
 		"react": "^17.0.2",
-        "react-dom": "17.0.2"
+		"react-dom": "17.0.2"
 	}
 }

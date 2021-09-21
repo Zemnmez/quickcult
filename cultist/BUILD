@@ -2,7 +2,12 @@ load("//:rules.bzl", "jest_test", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
 
-individual_ts = [ "save.ts", "action.ts", "types.ts", "history.ts" ]
+individual_ts = [
+    "save.ts",
+    "action.ts",
+    "types.ts",
+    "history.ts",
+]
 
 tsfiles = glob(
     ["*.ts"],
@@ -19,7 +24,6 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
-    tsconfig = "//:tsconfig_node",
     project_deps = [
         "//cultist/example",
         "//typescript",
@@ -27,8 +31,9 @@ ts_project(
         "//cultist:save",
         "//cultist:action",
         "//cultist/state",
-        "//cultist:types"
+        "//cultist:types",
     ],
+    tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/uuid",
         "@npm//immutable",
@@ -38,44 +43,42 @@ ts_project(
 # Separate project needed for 'save' to prevent dependency cycle.
 ts_project(
     name = "save",
-    srcs = [ "save.ts"],
+    srcs = ["save.ts"],
     composite = True,
     declaration = True,
-    incremental = True
+    incremental = True,
 )
 
 ts_project(
     name = "action",
-    srcs = [ "action.ts"],
+    srcs = ["action.ts"],
     composite = True,
     declaration = True,
     incremental = True,
     project_deps = [
         "//cultist/state",
-        "//cultist:types"
-    ]
+        "//cultist:types",
+    ],
 )
 
 ts_project(
     name = "history",
-    srcs = [ "history.ts" ],
+    srcs = ["history.ts"],
     composite = True,
     declaration = True,
     incremental = True,
     project_deps = [
-        "//cultist:types"
-    ]
+        "//cultist:types",
+    ],
 )
 
 ts_project(
     name = "types",
-    srcs = [ "types.ts" ],
+    srcs = ["types.ts"],
     composite = True,
     declaration = True,
-    incremental = True
+    incremental = True,
 )
-
-
 
 ts_project(
     name = "tests",
@@ -83,8 +86,11 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
+    project_deps = [
+        ":cultist",
+        ":save",
+    ],
     tsconfig = "//:tsconfig_node",
-    project_deps = [ ":cultist", ":save" ],
     deps = [
         "@npm//@types/jest",
     ],
@@ -94,7 +100,7 @@ jest_test(
     name = "test",
     srcs = [f[:-len(".ts")] + ".js" for f in tstestfiles],
     project_deps = [
-        ":tests"
+        ":tests",
     ],
     deps = [
         "@npm//immutable",

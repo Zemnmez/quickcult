@@ -15,15 +15,15 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
-    tsconfig = "//:tsconfig_node",
     project_deps = [
         "//cultist:save",
         "//typescript",
-        "//typescript/iter"
+        "//typescript/iter",
     ],
+    tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/uuid",
-        "@npm//immutable"
+        "@npm//immutable",
     ],
 )
 
@@ -32,11 +32,11 @@ ts_project(
     srcs = tstestfiles,
     composite = True,
     declaration = True,
-    tsconfig = "//:tsconfig_node",
     project_deps = [
         "//cultist:save",
         ":state",
     ],
+    tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/jest",
     ],
@@ -47,7 +47,7 @@ jest_test(
     srcs = [f[:-len(".ts")] + ".js" for f in tstestfiles],
     project_deps = [
         "//cultist:save",
-        ":state"
+        ":state",
     ],
     deps = [
         "@npm//immutable",

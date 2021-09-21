@@ -1,5 +1,4 @@
 load("//:rules.bzl", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -21,12 +20,12 @@ ts_project(
     srcs = tsfiles,
     composite = True,
     declaration = True,
-    preserve_jsx = True,
     incremental = True,
-    tsconfig = "//:tsconfig_jsx",
+    preserve_jsx = True,
     project_deps = [
         "//cultist:cultist",
     ],
+    tsconfig = "//:tsconfig_jsx",
     deps = [
         "@npm//@types/react",
         "@npm//react",

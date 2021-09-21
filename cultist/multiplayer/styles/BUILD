@@ -4,10 +4,9 @@ files = glob(["**/*"])
 
 filegroup(
     name = "styles",
-    srcs=files
+    srcs = files,
 )
 
 exports_files(
-    files
+    files,
 )
-
