@@ -3,7 +3,7 @@
  */
 
 import * as Save from '//cultist/save';
-import * as State from '//cultist/state';
+import * as State from './state';
 import * as Iter from '//typescript/iter';
 import { maybe } from '//typescript/util';
 import Immutable from 'immutable';

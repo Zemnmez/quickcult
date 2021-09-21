@@ -13,7 +13,6 @@ next_deps = [
         "//:tsconfig.json",
         "//:jsx.tsconfig.json",
         "//typescript/config:jsx.tsconfig.json",
-        "//cultist/react:react_js"
     ]
 
 
@@ -34,6 +33,7 @@ genrule(
     srcs = next_deps,
     outs = ["build.tar.gz"],
     cmd = """
+        pwd; echo "$(locations //cultist/multiplayer/pages:pages_js)";
         NEXT_ROOT=./cultist/multiplayer;
         $(execpath @npm//next/bin:next) build $$NEXT_ROOT &&
         $(execpath @npm//next/bin:next) export $$NEXT_ROOT &&
@@ -41,8 +41,7 @@ genrule(
     """,
     exec_tools = [
         "@npm//next/bin:next",
-        "@npm//:node_modules",
-    ] + [],
+    ],
 )
 
 next(

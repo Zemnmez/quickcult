@@ -18,8 +18,8 @@ ts_project(
     tsconfig = "//:tsconfig_node",
     project_deps = [
         "//cultist:save",
-        "//typescript:typescript",
-        "//typescript/iter:iter"
+        "//typescript",
+        "//typescript/iter"
     ],
     deps = [
         "@npm//@types/uuid",
