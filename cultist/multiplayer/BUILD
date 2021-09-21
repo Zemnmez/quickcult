@@ -22,8 +22,7 @@ next_deps = [
 next(
     name = "next",
     templated_args = [
-        "$(rootpath //cultist/multiplayer/pages:pages_js)/cultist/multiplayer",
-        "next",
+        "$(rootpaths //cultist/multiplayer/pages:pages_js)/cultist/multiplayer",
     ],
     data = next_deps,
     link_workspace_root = True
@@ -31,17 +30,15 @@ next(
 
 genrule(
     name = "multiplayer",
-    srcs = next_deps,
     outs = ["build.tar.gz"],
     cmd = """
-        pwd; echo "$(locations //cultist/multiplayer/pages:pages_js)";
         NEXT_ROOT=./cultist/multiplayer;
-        $(execpath @npm//next/bin:next) build $$NEXT_ROOT &&
-        $(execpath @npm//next/bin:next) export $$NEXT_ROOT &&
+        $(execpaths :next) build
+        $(execpaths :next) export
         tar -czvf $@ $$NEXT_ROOT/out
     """,
     exec_tools = [
-        "@npm//next/bin:next",
+        ":next",
     ],
 )
 
