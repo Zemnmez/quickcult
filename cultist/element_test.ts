@@ -1,4 +1,4 @@
-import * as cultist from '//cultist';
+import * as cultist from 'cultist';
 import immutable from 'immutable';
 
 describe('count', () => {
@@ -13,8 +13,6 @@ describe('count', () => {
 			'element1235',
 			cultist.state.createElement('money')
 		);
-
-		console.log(JSON.stringify(stacks.toJSON()));
 
 		expect(cultist.element.count('money', stacks)).toEqual(2);
 	});

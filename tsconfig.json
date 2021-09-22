@@ -20,7 +20,7 @@
 		"composite": true,
 		"incremental": true,
 		"paths": {
-			"//*": [
+			"*": [
 				"*",
 				"./bazel-out/k8-fastbuild/bin/*",
 				"./bazel-out/x64_windows-fastbuild/bin/*",
@@ -30,14 +30,7 @@
 				"./bazel-out/darwin-fastbuild/bin/*",
 				"./bazel-out/darwin-dbg/bin/*"
 			]
-		},
-		"plugins": [
-			{ "transform": "typescript-transform-paths" },
-			{
-				"transform": "typescript-transform-paths",
-				"afterDeclarations": true
-			}
-		]
+		}
 	},
 	"exclude": ["node_modules", "**/node_modules/*", "external/*"]
 }
