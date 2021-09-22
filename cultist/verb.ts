@@ -1,7 +1,7 @@
-import * as cultist from '//cultist/types';
-import * as Slots from '//cultist/slots';
-import { filter, remove } from '//typescript/iter';
-import { isDefined } from '//typescript/guard';
+import * as cultist from 'cultist/types';
+import * as Slots from 'cultist/slots';
+import { filter, remove } from 'typescript/iter';
+import { isDefined } from 'typescript/guard';
 
 function* elementCombosForVerb(
 	verb: cultist.Verb,

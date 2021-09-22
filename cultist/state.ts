@@ -2,9 +2,9 @@
  * @fileoverview like save state, but more sane.
  */
 
-import * as save from '//cultist/save';
-import * as iter from '//typescript/iter';
-import { optionalChain } from '//typescript/util';
+import * as save from 'cultist/save';
+import * as iter from 'typescript/iter';
+import { optionalChain } from 'typescript/util';
 import immutable from 'immutable';
 import { v4 as v4uuid } from 'uuid';
 

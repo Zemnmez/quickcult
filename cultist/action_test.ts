@@ -1,6 +1,6 @@
-import * as cultist from '//cultist';
+import * as cultist from 'cultist';
 import immutable from 'immutable';
-import * as element from '//cultist/element';
+import * as element from 'cultist/element';
 
 describe('decreaseQuantity', () => {
 	test('stacked', () => {
