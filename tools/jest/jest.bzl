@@ -10,6 +10,7 @@ def jest_test(name, srcs, deps = [], jest_config="//:jest.ts.config.js", **kwarg
         "--ci",
         "--colors",
     ]
+
     templated_args.extend(["--config", "$(rootpath %s)" % jest_config])
     for src in srcs:
         templated_args.extend(["--runTestsByPath", "$(rootpath %s)" % src])
