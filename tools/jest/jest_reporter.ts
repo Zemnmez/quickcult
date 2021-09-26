@@ -3,7 +3,6 @@ class BazelReporter {
 		_: unknown,
 		results: { numFailedTests?: number; snapshot: { failure: boolean } }
 	) {
-		console.log('Running tests with args: ', process.argv);
 		if (results.numFailedTests && results.snapshot.failure) {
 			console.log(`================================================================================
 
