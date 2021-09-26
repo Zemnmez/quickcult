@@ -28,7 +28,7 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     )
 
 
-def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None, composite = False, tsconfig = "//:tsconfig", declaration = False, preserve_jsx = None, **kwargs):
+def ts_project(name, link_workspace_root = True, project_deps = [], deps = [], srcs = [], incremental = None, composite = False, tsconfig = "//:tsconfig_build", declaration = False, preserve_jsx = None, **kwargs):
     __ts_project(
         name = name + "_ts",
         deps = deps + [dep + "_ts" for dep in project_deps ],
@@ -38,6 +38,7 @@ def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None
         tsconfig = tsconfig,
         preserve_jsx = preserve_jsx,
         incremental = incremental,
+        link_workspace_root = link_workspace_root,
         **kwargs
     )
 
@@ -49,11 +50,11 @@ def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None
     )
 
 
-def __ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
+def __ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig_build", **kwargs):
     _ts_project(
         name = name,
         srcs = srcs,
-        deps = deps + ["@npm//typescript-transform-paths"],
+        deps = deps,
         tags = tags,
         tsconfig = tsconfig,
         **kwargs,
@@ -71,7 +72,7 @@ def eslint_test(name = None, data = [], args = [], **kwargs):
             "//:.eslintrc.json",
 
             "@npm//eslint-plugin-prettier", "@npm//@typescript-eslint/parser",
-            "@npm//@typescript-eslint/eslint-plugin", "@npm//eslint-config-prettier"
+            "@npm//@typescript-eslint/eslint-plugin", "@npm//eslint-config-prettier",
         ],
         args = args + [ "--ignore-path", "$(location //:.gitignore)" ] +
             [ "$(location " + x + ")" for x in data ]

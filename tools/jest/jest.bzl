@@ -22,12 +22,3 @@ def jest_test(name, srcs, deps = [], jest_config="//:jest.ts.config.js", **kwarg
         templated_args = templated_args,
         **kwargs
     )
-
-    # This rule is used specifically to update snapshots via `bazel run`
-    jest(
-        name = "%s.update" % name,
-        data = data,
-        templated_args = templated_args + ["-u"],
-        **kwargs
-    )
-

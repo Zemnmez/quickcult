@@ -1,15 +1,23 @@
-package(default_visibility = [ "//visibility:public" ])
 
 load("//:rules.bzl", "ts_config")
 
 ts_config(
     name = "node",
     src = "node.tsconfig.json",
-    deps = [ "//:tsconfig" ]
+    deps = [ ":build" ],
+    visibility = [ "//visibility:public" ]
 )
 
 ts_config(
     name = "jsx",
     src = "jsx.tsconfig.json",
-    deps = [ "//:tsconfig" ]
+    deps = [ ":build" ],
+    visibility = [ "//visibility:public" ]
+)
+
+ts_config(
+    name = "build",
+    src = "build.tsconfig.json",
+    deps = [ "//:tsconfig" ],
+    visibility = [ "//visibility:public" ]
 )
