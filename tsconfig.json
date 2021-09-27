@@ -17,6 +17,7 @@
 		"preserveSymlinks": true,
 		"forceConsistentCasingInFileNames": true,
 		"downlevelIteration": true,
+		"skipLibCheck": true,
 		"rootDirs": [
 			".",
 			"./bazel-out/k8-fastbuild/bin",

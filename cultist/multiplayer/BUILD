@@ -16,23 +16,19 @@ next_deps = [
     ":tsconfig_next",
     "//:tsconfig.json",
     "//:jsx.tsconfig.json",
-    "//typescript/config:jsx.tsconfig.json",
+    "//typescript/config:jsx.tsconfig.json"
 ]
 
 next(
     name = "next",
-    data = next_deps,
-    link_workspace_root = True,
-    templated_args = [
-        "$(rootpaths //cultist/multiplayer/pages:pages_js)/cultist/multiplayer",
-    ],
 )
 
 genrule(
     name = "multiplayer",
     outs = ["build.tar.gz"],
+    srcs = next_deps,
     cmd = """
-        NEXT_ROOT=./cultist/multiplayer;
+        NEXT_ROOT=$(rootpaths :next.config.js)/..;
         $(execpaths :next) build
         $(execpaths :next) export
         tar -czvf $@ $$NEXT_ROOT/out

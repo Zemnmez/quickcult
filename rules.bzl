@@ -18,7 +18,7 @@ def ts_config(**kwargs):
 
 def jest_test(link_workspace_root = None, project_deps = [], deps = [], **kwargs):
     _jest_test(
-        deps = deps + [append_tag(x + "_js") for x in project_deps],
+        deps = deps + [append_tag(x, "_js") for x in project_deps],
         **kwargs
     )
 

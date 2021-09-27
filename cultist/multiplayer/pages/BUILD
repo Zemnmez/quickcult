@@ -20,5 +20,7 @@ ts_project(
     visibility = ["//cultist/multiplayer:__subpackages__"],
     deps = [
         "@npm//next",
+        "@npm//@types/react",
+        "@npm//@types/react-dom"
     ],
 )
