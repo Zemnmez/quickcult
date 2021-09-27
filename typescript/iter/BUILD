@@ -8,7 +8,6 @@ ts_project(
     name = "iter",
     srcs = glob(
         include = ["*.ts"],
-        exclude = ["*_test.ts"],
     ),
     composite = True,
     declaration = True,
@@ -31,7 +30,5 @@ ts_project(
 jest_test(
     name = "test",
     srcs = [f[:-len(".ts")] + ".js" for f in tstestfiles],
-    deps = [
-        ":iter_js",
-    ],
+    project_deps = [ ":iter" ],
 )

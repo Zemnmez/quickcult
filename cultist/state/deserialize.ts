@@ -2,10 +2,10 @@
  * @fileoverview like save state, but more sane.
  */
 
-import * as Save from '//cultist/save';
+import * as Save from '../save';
 import * as State from './state';
-import * as Iter from '//typescript/iter';
-import { maybe } from '//typescript/util';
+import * as Iter from '../../typescript/iter';
+import { maybe } from '../../typescript/util';
 import Immutable from 'immutable';
 
 function intoMap<I, O>(

@@ -10,7 +10,6 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
-    tsconfig = "//:tsconfig",
     visibility = ["//cultist:__subpackages__"],
 )
 

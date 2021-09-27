@@ -2,10 +2,10 @@
  * @fileoverview like save state, but more sane.
  */
 
-import * as Save from '//cultist/save';
-import * as State from '//cultist/state';
-import * as Iter from '//typescript/iter';
-import { maybe } from '//typescript/util';
+import * as Save from '../save';
+import * as State from '../state';
+import * as Iter from '../../typescript/iter';
+import { maybe } from '../../typescript/util';
 
 export function elements(
 	s: State.State['elementStacks'] | State.Situation['situationStoredElements']

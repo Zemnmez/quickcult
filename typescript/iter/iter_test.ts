@@ -1,4 +1,4 @@
-import * as iter from '//typescript/iter';
+import * as iter from '.';
 
 describe('reduce', () => {
 	test('sum', () => {

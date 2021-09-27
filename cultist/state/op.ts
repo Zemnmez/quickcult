@@ -6,7 +6,7 @@ import {
 	MutableElementInstance,
 	NewElementInstance,
 	ElementInstance,
-} from '//cultist/state/state';
+} from '../state';
 import Immutable from 'immutable';
 import { v4 as v4uuid } from 'uuid';
 

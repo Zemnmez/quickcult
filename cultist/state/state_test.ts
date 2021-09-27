@@ -1,5 +1,5 @@
-import * as State from '//cultist/state';
-import * as Save from '//cultist/save';
+import * as State from '../state';
+import * as Save from '../save';
 
 function roundTrip<I, O>(a: (v: I) => O, b: (v: O) => I): (v: I) => I {
 	return (v: I) => b(a(v));

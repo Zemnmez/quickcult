@@ -15,7 +15,7 @@ def nodejs_binary(**kwargs):
 def ts_config(**kwargs):
     _ts_config(**kwargs)
 
-def jest_test(project_deps = [], deps = [], **kwargs):
+def jest_test(link_workspace_root = None, project_deps = [], deps = [], **kwargs):
     _jest_test(
         deps = deps + [ append_tag(x, "_js") for x in project_deps ],
         **kwargs
@@ -37,12 +37,14 @@ def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None
         name = name + "_ts",
         deps = deps + [append_tag(dep, "_ts") for dep in project_deps ],
         srcs = srcs,
+        deps = deps,
         composite = composite,
         declaration = declaration,
         tsconfig = tsconfig,
         preserve_jsx = preserve_jsx,
         incremental = incremental,
-        resolve_json_module = resolve_json_module,
+        link_workspace_root = link_workspace_root,
+        validate = validate,
         **kwargs
     )
 
@@ -59,12 +61,11 @@ def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None
     )
 
 
-def __ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
+def __ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig_build", **kwargs):
     _ts_project(
         name = name,
-        tsc = "@npm//ttypescript/bin:ttsc",
-	srcs = srcs,
-        deps = deps + ["@npm//typescript-transform-paths"],
+        srcs = srcs,
+        deps = deps,
         tags = tags,
         tsconfig = tsconfig,
         **kwargs,
@@ -82,7 +83,7 @@ def eslint_test(name = None, data = [], args = [], **kwargs):
             "//:.eslintrc.json",
 
             "@npm//eslint-plugin-prettier", "@npm//@typescript-eslint/parser",
-            "@npm//@typescript-eslint/eslint-plugin", "@npm//eslint-config-prettier"
+            "@npm//@typescript-eslint/eslint-plugin", "@npm//eslint-config-prettier",
         ],
         args = args + [ "--ignore-path", "$(location //:.gitignore)" ] +
             [ "$(location " + x + ")" for x in data ]

@@ -17,6 +17,12 @@ ts_config(
 )
 
 ts_config(
+	name = "tsconfig_build",
+	src = "build.tsconfig.json",
+	deps = [ "//typescript/config:build" ]
+)
+
+ts_config(
     name = "tsconfig_node",
     src = "node.tsconfig.json",
     deps = ["//typescript/config:node"],
