@@ -28,9 +28,12 @@ genrule(
     outs = ["build.tar.gz"],
     srcs = next_deps,
     cmd = """
-        NEXT_ROOT=$(rootpaths :next.config.js)/..;
-        $(execpaths :next) build
-        $(execpaths :next) export
+        NEXT_ROOT=./cultist/multiplayer;
+        echo "pages";
+        ls $(rootpaths //cultist/multiplayer/pages:pages_js);
+        echo "end pages";
+        $(execpaths :next) build $$NEXT_ROOT;
+        $(execpaths :next) export $$NEXT_ROOT;
         tar -czvf $@ $$NEXT_ROOT/out
     """,
     exec_tools = [
