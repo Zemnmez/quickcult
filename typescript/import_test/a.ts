@@ -1,4 +1,4 @@
-import * as b from 'typescript/import_test/b';
+import * as b from './b';
 
 const copy: string = b.MyString;
 

@@ -1,4 +1,4 @@
-export * as dict from 'typescript/iter/dict';
+export * as dict from './dict';
 
 /**
  * For an iterable set of tuples of something, number

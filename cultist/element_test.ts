@@ -1,4 +1,4 @@
-import * as cultist from 'cultist';
+import * as cultist from '.';
 import immutable from 'immutable';
 
 describe('count', () => {

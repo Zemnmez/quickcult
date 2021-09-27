@@ -8,21 +8,11 @@ ts_project(
     name = "iter",
     srcs = glob(
         include = ["*.ts"],
-        exclude = ["*_test.ts"],
     ),
     composite = True,
     declaration = True,
     incremental = True,
-)
-
-ts_project(
-    name = "tests_lib",
-    srcs = tstestfiles,
-    composite = True,
-    declaration = True,
-    incremental = True,
     tsconfig = "//:tsconfig_node",
-    project_deps = [ ":iter" ],
     deps = [
         "@npm//@types/jest",
     ],
@@ -31,5 +21,5 @@ ts_project(
 jest_test(
     name = "test",
     srcs = [f[:-len(".ts")] + ".js" for f in tstestfiles],
-    project_deps = [ ":iter", ":tests_lib" ],
+    project_deps = [ ":iter" ],
 )

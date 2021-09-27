@@ -4,13 +4,13 @@ load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
 load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config")
 load("@build_bazel_rules_nodejs//:index.bzl", _nodejs_binary = "nodejs_binary", "js_library")
 
-def nodejs_binary(link_workspace_root = True, **kwargs):
+def nodejs_binary(link_workspace_root = None, **kwargs):
     _nodejs_binary(link_workspace_root = link_workspace_root, **kwargs)
 
 def ts_config(**kwargs):
     _ts_config(**kwargs)
 
-def jest_test(link_workspace_root = True, project_deps = [], deps = [], **kwargs):
+def jest_test(link_workspace_root = None, project_deps = [], deps = [], **kwargs):
     _jest_test(
         deps = deps + [ x + "_js" for x in project_deps ],
         link_workspace_root = link_workspace_root,
@@ -28,17 +28,19 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     )
 
 
-def ts_project(name, link_workspace_root = True, project_deps = [], deps = [], srcs = [], incremental = None, composite = False, tsconfig = "//:tsconfig_build", declaration = False, preserve_jsx = None, **kwargs):
+def ts_project(name, link_workspace_root = None, project_deps = [], deps = [], srcs = [], validate = None, incremental = None, composite = False, tsconfig = "//:tsconfig_build", declaration = False, preserve_jsx = None, **kwargs):
+    deps = deps + [dep + "_ts" for dep in project_deps ]
     __ts_project(
         name = name + "_ts",
-        deps = deps + [dep + "_ts" for dep in project_deps ],
         srcs = srcs,
+        deps = deps,
         composite = composite,
         declaration = declaration,
         tsconfig = tsconfig,
         preserve_jsx = preserve_jsx,
         incremental = incremental,
         link_workspace_root = link_workspace_root,
+        validate = validate,
         **kwargs
     )
 
