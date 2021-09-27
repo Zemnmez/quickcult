@@ -7,12 +7,19 @@
 #   See https://www.npmjs.com/package/@bazel/typescript#installation
 
 load("//:rules.bzl", "ts_config")
+load("@npm//@bazel/buildifier:index.bzl", "buildifier_test")
 
 package(default_visibility = [":__subpackages__"])
 
 ts_config(
     name = "tsconfig",
     src = "tsconfig.json",
+)
+
+ts_config(
+    name = "tsconfig_build",
+    src = "build.tsconfig.json",
+    deps = ["//typescript/config:build"],
 )
 
 ts_config(
@@ -24,6 +31,7 @@ ts_config(
 ts_config(
     name = "tsconfig_jsx",
     src = "jsx.tsconfig.json",
+    deps = ["//typescript/config:jsx"],
 )
 
 exports_files(
@@ -35,4 +43,19 @@ exports_files(
         ".eslintrc.json",
     ],
     visibility = ["//visibility:public"],
+)
+
+build_files = glob([
+    "**/BUILD",
+    "**/*.bzl",
+    "**/*.bazel",
+])
+
+buildifier_test(
+    name = "bzl_format",
+    args = [
+        "--lint",
+        "warn",
+    ] + build_files,
+    data = build_files,
 )

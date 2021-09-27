@@ -11,7 +11,6 @@ ts_project(
     composite = True,
     declaration = True,
     incremental = True,
-    tsconfig = "//:tsconfig",
     visibility = ["//visibility:public"],
     deps = [
         "@npm//@types/node",

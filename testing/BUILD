@@ -18,7 +18,6 @@ ts_project(
     declaration = True,
     incremental = True,
     preserve_jsx = False,
-    tsconfig = "//:tsconfig",
     deps = [
         "@npm//@types/jest",
         "@npm//@types/node",

@@ -5,15 +5,20 @@ load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project 
 load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library", _nodejs_binary = "nodejs_binary")
 
+def append_tag(selector, tag):
+    if selector.startswith("//") and (":" not in selector):
+        return selector + ":" + selector[selector.rfind("/") + 1:] + tag
+    return selector + tag
+
 def nodejs_binary(**kwargs):
     _nodejs_binary(**kwargs)
 
 def ts_config(**kwargs):
     _ts_config(**kwargs)
 
-def jest_test(project_deps = [], deps = [], **kwargs):
+def jest_test(link_workspace_root = None, project_deps = [], deps = [], **kwargs):
     _jest_test(
-        deps = deps + [x + "_js" for x in project_deps],
+        deps = deps + [append_tag(x, "_js") for x in project_deps],
         **kwargs
     )
 
@@ -22,37 +27,43 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     eslint_test(
         name = name,
         data = targets,
-        tags = tags + ["+formatting"],
+        tags = tags + ["ts_formatting"],
         args = ["$(location %s)" % x for x in targets],
         **kwargs
     )
 
-def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None, composite = False, tsconfig = "//:tsconfig", declaration = False, preserve_jsx = None, **kwargs):
+def ts_project(name, project_deps = [], deps = [], srcs = [], validate = None, link_workspace_root = True, incremental = None, resolve_json_module = None, composite = False, tsconfig = "//:tsconfig_build", declaration = False, preserve_jsx = None, **kwargs):
     __ts_project(
         name = name + "_ts",
-        deps = deps + [dep + "_ts" for dep in project_deps],
+        deps = deps + [append_tag(dep, "_ts") for dep in project_deps],
         srcs = srcs,
         composite = composite,
         declaration = declaration,
         tsconfig = tsconfig,
         preserve_jsx = preserve_jsx,
         incremental = incremental,
+        link_workspace_root = link_workspace_root,
+        validate = validate,
         **kwargs
     )
+
+    js_srcs = [src[:src.rfind(".")] + ".js" for src in srcs]
+
+    if preserve_jsx:
+        js_srcs = [src.replace(".ts", ".js").replace("tsx", ".jsx") for src in srcs]
 
     js_library(
         name = name + "_js",
-        deps = [dep + "_js" for dep in project_deps] + deps,
-        srcs = [src[:src.rfind(".")] + ".js" for src in srcs],
+        deps = [append_tag(dep, "_js") for dep in project_deps] + deps,
+        srcs = js_srcs,
         **kwargs
     )
 
-def __ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig", **kwargs):
+def __ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig_build", **kwargs):
     _ts_project(
         name = name,
-        tsc = "@npm//ttypescript/bin:ttsc",
         srcs = srcs,
-        deps = deps + ["@npm//typescript-transform-paths"],
+        deps = deps,
         tags = tags,
         tsconfig = tsconfig,
         **kwargs

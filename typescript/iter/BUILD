@@ -31,7 +31,5 @@ ts_project(
 jest_test(
     name = "test",
     srcs = [f[:-len(".ts")] + ".js" for f in tstestfiles],
-    deps = [
-        ":iter_js",
-    ],
+    project_deps = [":iter"],
 )

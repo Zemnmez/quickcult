@@ -1,7 +1,7 @@
-import SaveStateExample from '//cultist/example/savestate';
-import * as save from '//cultist/save';
+import SaveStateExample from './example/savestate';
+import * as save from './save';
 
 test('savestate', () => {
 	const test: save.State = SaveStateExample;
-	console.log(test);
+	expect(test).not.toBeUndefined();
 });

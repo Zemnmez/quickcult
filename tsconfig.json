@@ -7,36 +7,26 @@
 		"esModuleInterop": true,
 		"moduleResolution": "node",
 		"strict": true,
+		"jsx": "react",
 		"baseUrl": "./",
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitAny": true,
 		"noImplicitOverride": true,
 		"noImplicitThis": true,
-		"noPropertyAccessFromIndexSignature": true,
 		"declaration": true,
 		"preserveSymlinks": true,
 		"forceConsistentCasingInFileNames": true,
 		"downlevelIteration": true,
-		"composite": true,
-		"incremental": true,
-		"paths": {
-			"//*": [
-				"*",
-				"./bazel-out/k8-fastbuild/bin/*",
-				"./bazel-out/x64_windows-fastbuild/bin/*",
-				"./bazel-out/x64_windows-dbg/bin/*",
-				"./bazel-out/k8-dbg/bin/*",
-				"./bazel-out/host/bin/*",
-				"./bazel-out/darwin-fastbuild/bin/*",
-				"./bazel-out/darwin-dbg/bin/*"
-			]
-		},
-		"plugins": [
-			{ "transform": "typescript-transform-paths" },
-			{
-				"transform": "typescript-transform-paths",
-				"afterDeclarations": true
-			}
+		"skipLibCheck": true,
+		"rootDirs": [
+			".",
+			"./bazel-out/k8-fastbuild/bin",
+			"./bazel-out/x64_windows-fastbuild/bin",
+			"./bazel-out/x64_windows-dbg/bin",
+			"./bazel-out/k8-dbg/bin",
+			"./bazel-out/host/bin",
+			"./bazel-out/darwin-fastbuild/bin",
+			"./bazel-out/darwin-dbg/bin"
 		]
 	},
 	"exclude": ["node_modules", "**/node_modules/*", "external/*"]
