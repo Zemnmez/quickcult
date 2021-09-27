@@ -7,7 +7,7 @@ load("@build_bazel_rules_nodejs//:index.bzl", "js_library", _nodejs_binary = "no
 
 def append_tag(selector, tag):
     if selector.startswith("//") and (":" not in selector):
-        return selector + ":" + selector[selector.rfind("/")+1:] + tag
+        return selector + ":" + selector[selector.rfind("/") + 1:] + tag
     return selector + tag
 
 def nodejs_binary(**kwargs):
@@ -25,18 +25,17 @@ def jest_test(link_workspace_root = None, project_deps = [], deps = [], **kwargs
 def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     targets = srcs + data
     eslint_test(
-            name = name,
-            data = targets,
-            tags = tags + ["ts_formatting"],
-            args = ["$(location %s)" % x for x in targets],
-            **kwargs
+        name = name,
+        data = targets,
+        tags = tags + ["ts_formatting"],
+        args = ["$(location %s)" % x for x in targets],
+        **kwargs
     )
-
 
 def ts_project(name, project_deps = [], deps = [], srcs = [], validate = None, link_workspace_root = True, incremental = None, resolve_json_module = None, composite = False, tsconfig = "//:tsconfig_build", declaration = False, preserve_jsx = None, **kwargs):
     __ts_project(
         name = name + "_ts",
-        deps = deps + [append_tag(dep, "_ts") for dep in project_deps ],
+        deps = deps + [append_tag(dep, "_ts") for dep in project_deps],
         srcs = srcs,
         composite = composite,
         declaration = declaration,
@@ -48,18 +47,17 @@ def ts_project(name, project_deps = [], deps = [], srcs = [], validate = None, l
         **kwargs
     )
 
-    js_srcs = [ src[:src.rfind(".")] + ".js" for src in srcs ]
+    js_srcs = [src[:src.rfind(".")] + ".js" for src in srcs]
 
     if preserve_jsx:
-        js_srcs = [ src.replace(".ts", ".js").replace("tsx", ".jsx") for src in srcs ]
+        js_srcs = [src.replace(".ts", ".js").replace("tsx", ".jsx") for src in srcs]
 
     js_library(
         name = name + "_js",
-        deps = [ append_tag(dep, "_js") for dep in project_deps ] + deps,
+        deps = [append_tag(dep, "_js") for dep in project_deps] + deps,
         srcs = js_srcs,
         **kwargs
     )
-
 
 def __ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig_build", **kwargs):
     _ts_project(
@@ -81,8 +79,10 @@ def eslint_test(name = None, data = [], args = [], **kwargs):
             "//:.gitignore",
             "//:.editorconfig",
             "//:.eslintrc.json",
-            "@npm//eslint-plugin-prettier", "@npm//@typescript-eslint/parser",
-            "@npm//@typescript-eslint/eslint-plugin", "@npm//eslint-config-prettier",
+            "@npm//eslint-plugin-prettier",
+            "@npm//@typescript-eslint/parser",
+            "@npm//@typescript-eslint/eslint-plugin",
+            "@npm//eslint-config-prettier",
         ],
         args = args + ["--ignore-path", "$(location //:.gitignore)"] +
                ["$(location " + x + ")" for x in data],

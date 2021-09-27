@@ -59,4 +59,3 @@ buildifier_test(
     ] + build_files,
     data = build_files,
 )
-
