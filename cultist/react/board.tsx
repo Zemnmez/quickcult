@@ -1,4 +1,4 @@
-import * as cultist from '//cultist';
+import * as cultist from '../../cultist';
 import React from 'react';
 
 export interface BoardProps {

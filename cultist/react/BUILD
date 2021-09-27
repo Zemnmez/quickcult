@@ -22,10 +22,10 @@ ts_project(
     declaration = True,
     incremental = True,
     preserve_jsx = True,
-    resolve_json_module = True,
     project_deps = [
         "//cultist:cultist",
     ],
+    resolve_json_module = True,
     tsconfig = "//:tsconfig_jsx",
     deps = [
         "@npm//@types/react",

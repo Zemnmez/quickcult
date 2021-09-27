@@ -9,6 +9,7 @@
 		"@bazel/typescript": "^4.2.0",
 		"@types/jest": "^26.0.24",
 		"@types/node": "^16.4.2",
+		"@types/react": "^17.0.24",
 		"@types/react-dom": "^17.0.9",
 		"@types/uuid": "^8.3.1",
 		"@typescript-eslint/eslint-plugin": "^4.31.1",
@@ -23,6 +24,7 @@
 		"module-alias": "^2.2.2",
 		"onchange": "^7.1.0",
 		"prettier": "^2.4.0",
+		"react": "^17.0.2",
 		"ts-node": "^10.2.1",
 		"uuid": "^8.3.2",
 		"yaml-validator": "^3.0.1"
@@ -31,7 +33,7 @@
 		"build": "yarn bazel build //...",
 		"test": "yarn bazel test //...",
 		"fix_build": "bash -c \"git ls-files | grep -P 'BUILD(?:\\.(?:bzl|bazel))?' | xargs yarn run buildifier --lint fix \" ",
-		"fix_js": "yarn run eslint --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.json'",
+		"fix_js": "yarn run eslint --fix --ignore-path .gitignore '**/*.ts' '**/*.js' '**/*.json' '**/*.tsx'",
 		"fix": "yarn run fix_build && yarn run fix_js"
 	},
 	"dependencies": {

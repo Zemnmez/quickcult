@@ -5,20 +5,20 @@ package(default_visibility = ["//visibility:public"])
 ts_config(
     name = "node",
     src = "node.tsconfig.json",
-    deps = [ ":build" ],
-    visibility = [ "//visibility:public" ]
+    visibility = ["//visibility:public"],
+    deps = [":build"],
 )
 
 ts_config(
     name = "jsx",
     src = "jsx.tsconfig.json",
-    deps = [ ":build" ],
-    visibility = [ "//visibility:public" ]
+    visibility = ["//visibility:public"],
+    deps = [":build"],
 )
 
 ts_config(
     name = "build",
     src = "build.tsconfig.json",
-    deps = [ "//:tsconfig" ],
-    visibility = [ "//visibility:public" ]
+    visibility = ["//visibility:public"],
+    deps = ["//:tsconfig"],
 )

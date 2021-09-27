@@ -26,18 +26,17 @@ def ts_lint(name, srcs = [], tags = [], data = [], **kwargs):
     eslint_test(
             name = name,
             data = targets,
-            tags = tags + ["+formatting"],
+            tags = tags + ["ts_formatting"],
             args = ["$(location %s)" % x for x in targets],
             **kwargs
     )
 
 
-def ts_project(name, project_deps = [], deps = [], srcs = [], incremental = None, resolve_json_module = None, composite = False, tsconfig = "//:tsconfig", declaration = False, preserve_jsx = None, **kwargs):
+def ts_project(name, project_deps = [], deps = [], srcs = [], validate = None, link_workspace_root = True, incremental = None, resolve_json_module = None, composite = False, tsconfig = "//:tsconfig_build", declaration = False, preserve_jsx = None, **kwargs):
     __ts_project(
         name = name + "_ts",
         deps = deps + [append_tag(dep, "_ts") for dep in project_deps ],
         srcs = srcs,
-        deps = deps,
         composite = composite,
         declaration = declaration,
         tsconfig = tsconfig,

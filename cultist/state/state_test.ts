@@ -1,4 +1,4 @@
-import * as State from '../state';
+import * as State from '.';
 import * as Save from '../save';
 
 function roundTrip<I, O>(a: (v: I) => O, b: (v: O) => I): (v: I) => I {
