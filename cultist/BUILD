@@ -32,6 +32,7 @@ ts_project(
         "//cultist:action",
         "//cultist/state",
         "//cultist:types",
+
     ],
     tsconfig = "//:tsconfig_node",
     deps = [
@@ -90,6 +91,7 @@ ts_project(
         ":cultist",
         ":save",
     ],
+
     tsconfig = "//:tsconfig_node",
     deps = [
         "@npm//@types/jest",

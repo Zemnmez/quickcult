@@ -1,10 +1,9 @@
-load("//tools/jest:jest.bzl",  _jest_test = "jest_test")
+load("//tools/jest:jest.bzl", _jest_test = "jest_test")
 load("//tools/go:go.bzl", _test_go_fmt = "test_go_fmt")
-load("@io_bazel_rules_go//go:def.bzl", _go_library = "go_library", _go_test = "go_test", _go_binary = "go_binary")
-load("@npm//@bazel/typescript:index.bzl", _ts_project = "ts_project")
+load("@io_bazel_rules_go//go:def.bzl", _go_binary = "go_binary", _go_library = "go_library", _go_test = "go_test")
+load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config", _ts_project = "ts_project")
 load("@npm//eslint:index.bzl", _eslint_test = "eslint_test")
-load("@npm//@bazel/typescript:index.bzl", _ts_config = "ts_config")
-load("@build_bazel_rules_nodejs//:index.bzl", _nodejs_binary = "nodejs_binary", "js_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library", _nodejs_binary = "nodejs_binary")
 
 def append_tag(selector, tag):
     if selector.startswith("//") and (":" not in selector):
@@ -19,7 +18,7 @@ def ts_config(**kwargs):
 
 def jest_test(link_workspace_root = None, project_deps = [], deps = [], **kwargs):
     _jest_test(
-        deps = deps + [ append_tag(x, "_js") for x in project_deps ],
+        deps = deps + [append_tag(x + "_js") for x in project_deps],
         **kwargs
     )
 
@@ -69,7 +68,7 @@ def __ts_project(name, tags = [], deps = [], srcs = [], tsconfig = "//:tsconfig_
         deps = deps,
         tags = tags,
         tsconfig = tsconfig,
-        **kwargs,
+        **kwargs
     )
 
     ts_lint(name = name + "_lint", data = srcs, tags = tags)
@@ -82,12 +81,11 @@ def eslint_test(name = None, data = [], args = [], **kwargs):
             "//:.gitignore",
             "//:.editorconfig",
             "//:.eslintrc.json",
-
             "@npm//eslint-plugin-prettier", "@npm//@typescript-eslint/parser",
             "@npm//@typescript-eslint/eslint-plugin", "@npm//eslint-config-prettier",
         ],
-        args = args + [ "--ignore-path", "$(location //:.gitignore)" ] +
-            [ "$(location " + x + ")" for x in data ]
+        args = args + ["--ignore-path", "$(location //:.gitignore)"] +
+               ["$(location " + x + ")" for x in data],
     )
 
 def go_binary(name = None, importpath = None, deps = [], **kwargs):
@@ -102,7 +100,6 @@ def go_binary(name = None, importpath = None, deps = [], **kwargs):
         name = name + "_fmt",
         **kwargs
     )
-
 
 def go_test(name = None, importpath = None, deps = [], **kwargs):
     _go_test(
@@ -129,4 +126,3 @@ def go_library(name = None, importpath = None, deps = [], **kwargs):
         name = name + "_fmt",
         **kwargs
     )
-

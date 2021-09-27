@@ -20,5 +20,6 @@ ts_config(
     name = "build",
     src = "build.tsconfig.json",
     visibility = ["//visibility:public"],
+
     deps = ["//:tsconfig"],
 )
